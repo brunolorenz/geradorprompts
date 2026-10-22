@@ -89,9 +89,22 @@
     box-shadow:0 6px 18px rgba(227,169,79,.22);
   }
   .btn.primary:hover{filter:brightness(1.05)}
+  .btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+  .btn.ghost:hover{background:var(--panel-2);color:var(--txt)}
+  .btn.small{font-size:12px;padding:8px 12px;border-radius:9px;width:100%;margin-top:8px}
 
   /* ---------- PREVIEW ---------- */
-  .preview{position:sticky;top:20px}
+  .preview{
+    position:sticky;top:20px;
+    max-height:calc(100vh - 40px);
+    overflow-y:auto;
+    scrollbar-width:thin;
+    scrollbar-color:#2c3442 transparent;
+  }
+  .preview::-webkit-scrollbar{width:7px}
+  .preview::-webkit-scrollbar-thumb{background:#2c3442;border-radius:8px}
+  .preview::-webkit-scrollbar-track{background:transparent}
+
   .preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
   .preview-head h2{font-size:15px;margin:0;letter-spacing:-.01em}
   .seg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
@@ -107,7 +120,7 @@
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     font-size:12.6px;line-height:1.6;color:#cdd6e3;
     white-space:pre-wrap;word-break:break-word;
-    max-height:400px;overflow:auto;
+    max-height:340px;overflow:auto;
   }
   #promptOut::-webkit-scrollbar{width:8px}
   #promptOut::-webkit-scrollbar-thumb{background:#2c3442;border-radius:8px}
@@ -115,22 +128,65 @@
   .preview .row-actions .btn{flex:1}
   .preview .row-actions .btn.primary{flex:1.6}
 
-  /* ---------- FAVORITOS ---------- */
-  .favs{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}
-  .favs h3{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:0 0 10px;font-weight:700}
-  .fav{
+  /* ---------- BLOCOS COLAPSÁVEIS (favs/histórico) ---------- */
+  details.block{
+    margin-top:16px;border-top:1px solid var(--line);padding-top:14px;
+  }
+  details.block summary{
+    cursor:pointer;font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;
+    color:var(--muted);font-weight:700;list-style:none;
+    display:flex;align-items:center;gap:9px;user-select:none;padding:3px 0;
+    -webkit-tap-highlight-color:transparent;
+  }
+  details.block summary::-webkit-details-marker{display:none}
+  details.block summary::before{
+    content:'▸';display:inline-block;font-size:10px;color:var(--muted);
+    transition:transform .15s;
+  }
+  details.block[open] summary::before{transform:rotate(90deg)}
+  details.block summary .count{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:999px;
+    padding:2px 8px;font-size:10.5px;letter-spacing:0;text-transform:none;
+    color:var(--muted);font-weight:600;margin-left:auto;
+  }
+  .listbox{
+    max-height:220px;overflow-y:auto;margin-top:10px;
+    scrollbar-width:thin;scrollbar-color:#2c3442 transparent;padding-right:2px;
+  }
+  .listbox::-webkit-scrollbar{width:6px}
+  .listbox::-webkit-scrollbar-thumb{background:#2c3442;border-radius:6px}
+
+  /* ---------- ITENS (favoritos + histórico) ---------- */
+  .fav, .hist-item{
     display:flex;align-items:center;gap:10px;
     background:var(--panel-2);border:1px solid var(--line);
     border-radius:11px;padding:9px 10px;margin-bottom:8px;
   }
-  .fav-label{flex:1;font-size:12.5px;color:#c3ccda;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .fav-actions{display:flex;gap:4px;flex:none}
+  .hist-item{align-items:flex-start}
+  .fav-label, .hist-label{
+    flex:1;font-size:12.5px;color:#c3ccda;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .hist-info{flex:1;min-width:0}
+  .hist-time{
+    font-size:10.5px;color:var(--muted);margin-top:3px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .mode-badge{
+    font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    padding:1px 6px;border-radius:4px;
+  }
+  .mode-badge.detail{background:rgba(227,169,79,.16);color:var(--accent)}
+  .mode-badge.short{background:rgba(90,140,255,.16);color:#7aa6ff}
+  .fav-actions{display:flex;gap:2px;flex:none}
   .iconbtn{
     font:inherit;font-size:13px;cursor:pointer;border:none;background:transparent;
     color:var(--muted);padding:5px 7px;border-radius:7px;transition:.14s;
+    -webkit-tap-highlight-color:transparent;
   }
   .iconbtn:hover{background:#2b3342;color:var(--txt)}
-  .empty{font-size:12.5px;color:#67707e;font-style:italic}
+  .iconbtn.danger:hover{background:rgba(220,80,80,.15);color:#ff8686}
+  .empty{font-size:12.5px;color:#67707e;font-style:italic;padding:6px 2px}
 
   /* ---------- BARRA MOBILE ---------- */
   .mobilebar{display:none}
@@ -149,9 +205,10 @@
     h1{font-size:18px}
     .top p{font-size:13px}
     .panel{padding:16px;border-radius:14px}
-    .preview{position:static}
+    .preview{position:static;max-height:none;overflow:visible}
     #promptOut{max-height:none;font-size:12.2px}
     .chip{font-size:13px;padding:9px 12px}
+    .listbox{max-height:280px}
     .mobilebar{
       display:flex;gap:9px;position:fixed;left:0;right:0;bottom:0;z-index:100;
       padding:10px 12px calc(10px + env(safe-area-inset-bottom));
@@ -204,10 +261,16 @@
       <button class="btn" id="btnSave">⭐ Salvar</button>
     </div>
 
-    <div class="favs">
-      <h3>Prompts salvos</h3>
-      <div id="favList"></div>
-    </div>
+    <details class="block" open>
+      <summary>⭐ Prompts salvos <span class="count" id="favCount">0</span></summary>
+      <div id="favList" class="listbox"></div>
+    </details>
+
+    <details class="block" open>
+      <summary>🕒 Histórico <span class="count" id="histCount">0</span></summary>
+      <div id="histList" class="listbox"></div>
+      <button class="btn ghost small" id="btnClearHist">🗑️ Limpar histórico</button>
+    </details>
   </aside>
 </main>
 
@@ -395,7 +458,7 @@ function syncChips(){
 }
 
 /* ============================================================
-   HELPERS DE CONTEÚDO
+   HELPERS
    ============================================================ */
 function optEn(catKey, id){
   const cat = CATS.find(c => c.key === catKey);
@@ -406,6 +469,31 @@ function optLabel(catKey, id){
   const cat = CATS.find(c => c.key === catKey);
   const opt = cat.options.find(o => o.id === id);
   return opt ? opt.label : '';
+}
+function snapshotState(){
+  return {
+    scene: state.scene,
+    frame: state.frame,
+    environment: state.environment,
+    lighting: state.lighting,
+    style: state.style,
+    angle: state.angle,
+    extras: [...state.extras],
+    mode: mode
+  };
+}
+function restoreState(snap){
+  if (!snap) return;
+  ['scene','frame','environment','lighting','style','angle'].forEach(k => {
+    if (snap[k]) state[k] = snap[k];
+  });
+  state.extras = new Set(snap.extras || []);
+  if (snap.mode) mode = snap.mode;
+  document.querySelectorAll('.segbtn').forEach(x =>
+    x.classList.toggle('on', x.dataset.mode === mode)
+  );
+  syncChips();
+  update();
 }
 
 /* ============================================================
@@ -452,7 +540,7 @@ function buildPrompt(){
 }
 
 /* ============================================================
-   UPDATE / UI
+   UPDATE / TOAST
    ============================================================ */
 function update(){
   currentPrompt = buildPrompt();
@@ -460,9 +548,6 @@ function update(){
   $('#charCount').textContent = currentPrompt.length.toLocaleString('pt-BR') + ' caracteres';
 }
 
-/* ============================================================
-   TOAST
-   ============================================================ */
 let toastTimer;
 function toast(msg){
   const t = $('#toast');
@@ -473,13 +558,37 @@ function toast(msg){
 }
 
 /* ============================================================
+   LABEL + TEMPO
+   ============================================================ */
+function favLabel(){
+  const parts = [
+    optLabel('scene', state.scene),
+    optLabel('frame', state.frame),
+    optLabel('style', state.style)
+  ].filter(p => p && p !== 'Livre' && p !== 'Não especificar');
+  return parts.join(' · ') || 'Prompt';
+}
+function fmtTime(iso){
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = Math.floor((now - d) / 1000);
+  if (diff < 10) return 'agora';
+  if (diff < 60) return `há ${diff}s`;
+  if (diff < 3600) return `há ${Math.floor(diff/60)}min`;
+  if (diff < 86400) return `há ${Math.floor(diff/3600)}h`;
+  if (diff < 604800) return `há ${Math.floor(diff/86400)}d`;
+  return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+}
+
+/* ============================================================
    COPIAR
    ============================================================ */
 async function copyPrompt(){
   const text = currentPrompt;
+  let ok = false;
   try {
     await navigator.clipboard.writeText(text);
-    toast('Prompt copiado! ✓');
+    ok = true;
   } catch(e){
     const ta = document.createElement('textarea');
     ta.value = text;
@@ -487,10 +596,12 @@ async function copyPrompt(){
     ta.style.opacity = '0';
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand('copy'); toast('Prompt copiado! ✓'); }
-    catch(_) { toast('Não foi possível copiar'); }
+    try { document.execCommand('copy'); ok = true; } catch(_){}
     ta.remove();
   }
+  if (ok) toast('Prompt copiado! ✓');
+  else toast('Não foi possível copiar');
+  addToHistory();
 }
 
 /* ============================================================
@@ -501,12 +612,11 @@ function randomize(){
     if (cat.multi){
       state[cat.key] = new Set();
       const pool = cat.options.filter(o => o.id !== 'skip');
-      const n = Math.floor(Math.random() * 3); // 0 a 2 extras
+      const n = Math.floor(Math.random() * 3);
       const shuffled = [...pool].sort(() => Math.random() - 0.5);
       shuffled.slice(0, n).forEach(o => state[cat.key].add(o.id));
     } else {
-      const pool = cat.options;
-      const r = pool[Math.floor(Math.random() * pool.length)];
+      const r = cat.options[Math.floor(Math.random() * cat.options.length)];
       state[cat.key] = r.id;
     }
   });
@@ -536,21 +646,9 @@ function persistFavs(list){
   try { localStorage.setItem(FAV_KEY, JSON.stringify(list)); }
   catch(e){ toast('Não foi possível salvar'); }
 }
-function favLabel(){
-  const parts = [
-    optLabel('scene', state.scene),
-    optLabel('frame', state.frame),
-    optLabel('style', state.style)
-  ].filter(p => p && p !== 'Livre' && p !== 'Não especificar');
-  return parts.join(' · ') || 'Prompt';
-}
 function saveFav(){
   const list = loadFavs();
-  list.unshift({
-    id: Date.now(),
-    label: favLabel(),
-    text: currentPrompt
-  });
+  list.unshift({ id: Date.now(), label: favLabel(), text: currentPrompt });
   persistFavs(list.slice(0, 30));
   renderFavs();
   toast('Prompt salvo ⭐');
@@ -562,6 +660,7 @@ function deleteFav(id){
 function renderFavs(){
   const box = $('#favList');
   const list = loadFavs();
+  $('#favCount').textContent = list.length;
   box.innerHTML = '';
   if (!list.length){
     box.innerHTML = '<div class="empty">Nenhum prompt salvo ainda.</div>';
@@ -583,22 +682,137 @@ function renderFavs(){
     bCopy.className = 'iconbtn';
     bCopy.textContent = '📋';
     bCopy.title = 'Copiar';
-    bCopy.addEventListener('click', () => {
-      navigator.clipboard.writeText(f.text)
-        .then(() => toast('Prompt copiado! ✓'))
-        .catch(() => toast('Não foi possível copiar'));
-    });
+    bCopy.addEventListener('click', () => copyText(f.text));
 
     const bDel = document.createElement('button');
-    bDel.className = 'iconbtn';
+    bDel.className = 'iconbtn danger';
     bDel.textContent = '✕';
     bDel.title = 'Excluir';
     bDel.addEventListener('click', () => deleteFav(f.id));
 
-    actions.appendChild(bCopy);
-    actions.appendChild(bDel);
-    row.appendChild(label);
-    row.appendChild(actions);
+    actions.append(bCopy, bDel);
+    row.append(label, actions);
+    box.appendChild(row);
+  });
+}
+function copyText(text){
+  navigator.clipboard.writeText(text)
+    .then(() => toast('Prompt copiado! ✓'))
+    .catch(() => toast('Não foi possível copiar'));
+}
+
+/* ============================================================
+   HISTÓRICO (localStorage)
+   ============================================================ */
+const HIST_KEY = 'painting_prompts_hist_v1';
+const HIST_MAX = 50;
+
+function loadHist(){
+  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); }
+  catch(e){ return []; }
+}
+function persistHist(list){
+  try { localStorage.setItem(HIST_KEY, JSON.stringify(list)); }
+  catch(e){}
+}
+
+function addToHistory(){
+  const list = loadHist();
+  const entry = {
+    id: Date.now(),
+    ts: new Date().toISOString(),
+    label: favLabel(),
+    text: currentPrompt,
+    mode: mode,
+    snapshot: snapshotState()
+  };
+  // Se o último for idêntico, só atualiza timestamp (evita duplicata imediata)
+  if (list.length && list[0].text === entry.text){
+    list[0].ts = entry.ts;
+    list[0].mode = entry.mode;
+    list[0].snapshot = entry.snapshot;
+  } else {
+    list.unshift(entry);
+  }
+  persistHist(list.slice(0, HIST_MAX));
+  renderHist();
+}
+
+function deleteHist(id){
+  persistHist(loadHist().filter(h => h.id !== id));
+  renderHist();
+}
+
+function clearHist(){
+  if (!loadHist().length) return;
+  if (!confirm('Apagar todo o histórico?')) return;
+  persistHist([]);
+  renderHist();
+  toast('Histórico limpo');
+}
+
+function restoreHist(id){
+  const entry = loadHist().find(h => h.id === id);
+  if (!entry) return;
+  restoreState(entry.snapshot);
+  toast('Opções restauradas ↺');
+}
+
+function renderHist(){
+  const box = $('#histList');
+  const list = loadHist();
+  $('#histCount').textContent = list.length;
+  box.innerHTML = '';
+  if (!list.length){
+    box.innerHTML = '<div class="empty">Nada no histórico ainda — copie um prompt para começar.</div>';
+    return;
+  }
+  list.forEach(h => {
+    const row = document.createElement('div');
+    row.className = 'hist-item';
+
+    const info = document.createElement('div');
+    info.className = 'hist-info';
+
+    const label = document.createElement('div');
+    label.className = 'hist-label';
+    label.textContent = h.label;
+    label.title = h.text;
+
+    const time = document.createElement('div');
+    time.className = 'hist-time';
+    const modeBadge = document.createElement('span');
+    modeBadge.className = 'mode-badge ' + (h.mode === 'short' ? 'short' : 'detail');
+    modeBadge.textContent = h.mode === 'short' ? 'Conciso' : 'Detalhado';
+    const timeText = document.createElement('span');
+    timeText.textContent = fmtTime(h.ts);
+    time.append(modeBadge, timeText);
+
+    info.append(label, time);
+
+    const actions = document.createElement('div');
+    actions.className = 'fav-actions';
+
+    const bCopy = document.createElement('button');
+    bCopy.className = 'iconbtn';
+    bCopy.textContent = '📋';
+    bCopy.title = 'Copiar novamente';
+    bCopy.addEventListener('click', () => copyText(h.text));
+
+    const bRestore = document.createElement('button');
+    bRestore.className = 'iconbtn';
+    bRestore.textContent = '↺';
+    bRestore.title = 'Restaurar opções';
+    bRestore.addEventListener('click', () => restoreHist(h.id));
+
+    const bDel = document.createElement('button');
+    bDel.className = 'iconbtn danger';
+    bDel.textContent = '✕';
+    bDel.title = 'Excluir';
+    bDel.addEventListener('click', () => deleteHist(h.id));
+
+    actions.append(bCopy, bRestore, bDel);
+    row.append(info, actions);
     box.appendChild(row);
   });
 }
@@ -612,6 +826,7 @@ $('#btnSave').addEventListener('click', saveFav);
 $('#btnRandom').addEventListener('click', randomize);
 $('#mRandom').addEventListener('click', randomize);
 $('#btnReset').addEventListener('click', reset);
+$('#btnClearHist').addEventListener('click', clearHist);
 
 $('#segMode').addEventListener('click', e => {
   const b = e.target.closest('.segbtn');
@@ -626,7 +841,13 @@ $('#segMode').addEventListener('click', e => {
    ============================================================ */
 renderCategories();
 renderFavs();
+renderHist();
 update();
+
+/* Atualiza os "há Xmin" a cada 30s */
+setInterval(() => {
+  if (loadHist().length) renderHist();
+}, 30000);
 </script>
 </body>
 </html>
