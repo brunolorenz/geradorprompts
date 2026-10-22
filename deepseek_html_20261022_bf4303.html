@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gerador de Prompts — Pinturas</title>
+<style>
+  :root{
+    --bg:#0d0f13;
+    --panel:#151920;
+    --panel-2:#1b202a;
+    --line:#272e3a;
+    --txt:#e9edf3;
+    --muted:#8f9aab;
+    --accent:#e3a94f;
+    --accent-2:#f2c882;
+    --accent-ink:#1a1206;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background:
+      radial-gradient(900px 520px at 82% -12%, rgba(227,169,79,.11), transparent 60%),
+      radial-gradient(760px 420px at -5% 0%, rgba(90,140,255,.08), transparent 55%),
+      var(--bg);
+    color:var(--txt);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- HEADER ---------- */
+  .top{max-width:1260px;margin:0 auto;padding:26px 20px 6px}
+  .brand{display:flex;gap:14px;align-items:flex-start}
+  .logo{
+    width:48px;height:48px;border-radius:14px;flex:none;display:grid;place-items:center;font-size:23px;
+    background:linear-gradient(145deg,#e8b65f,#a9711f);
+    box-shadow:0 8px 24px rgba(227,169,79,.28);
+  }
+  h1{font-size:20px;margin:0 0 5px;letter-spacing:-.015em}
+  .top p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55;max-width:660px}
+
+  /* ---------- LAYOUT ---------- */
+  .layout{
+    max-width:1260px;margin:0 auto;padding:18px 20px 40px;
+    display:grid;grid-template-columns:minmax(0,1fr) 442px;gap:22px;align-items:start;
+  }
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+
+  /* ---------- CATEGORIAS ---------- */
+  .cat{margin-bottom:22px}
+  .cat:last-child{margin-bottom:8px}
+  .cat h3{
+    font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;
+    color:var(--muted);margin:0 0 11px;font-weight:700;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font:inherit;font-size:13.5px;line-height:1;
+    padding:9px 14px;border-radius:999px;cursor:pointer;
+    background:var(--panel-2);color:var(--txt);
+    border:1px solid var(--line);
+    transition:background .14s, border-color .14s, transform .14s, color .14s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .chip:hover{border-color:#3b465a;transform:translateY(-1px)}
+  .chip:active{transform:translateY(0)}
+  .chip.on{
+    background:linear-gradient(145deg,var(--accent-2),var(--accent));
+    border-color:var(--accent);color:var(--accent-ink);font-weight:700;
+    box-shadow:0 4px 14px rgba(227,169,79,.22);
+  }
+
+  /* ---------- BOTÕES ---------- */
+  .row-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
+  .btn{
+    font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+    padding:11px 16px;border-radius:11px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--txt);
+    transition:.14s;-webkit-tap-highlight-color:transparent;
+    display:inline-flex;align-items:center;gap:7px;justify-content:center;
+  }
+  .btn:hover{border-color:#3b465a;transform:translateY(-1px)}
+  .btn:active{transform:translateY(0)}
+  .btn.primary{
+    background:linear-gradient(145deg,var(--accent-2),var(--accent));
+    color:var(--accent-ink);border-color:var(--accent);
+    box-shadow:0 6px 18px rgba(227,169,79,.22);
+  }
+  .btn.primary:hover{filter:brightness(1.05)}
+
+  /* ---------- PREVIEW ---------- */
+  .preview{position:sticky;top:20px}
+  .preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .preview-head h2{font-size:15px;margin:0;letter-spacing:-.01em}
+  .seg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+  .segbtn{
+    font:inherit;font-size:11.5px;font-weight:600;cursor:pointer;
+    padding:6px 11px;border-radius:7px;border:none;background:transparent;color:var(--muted);
+    transition:.14s;
+  }
+  .segbtn.on{background:#2b3342;color:var(--txt)}
+  #promptOut{
+    margin:0;padding:15px;border-radius:12px;
+    background:#0a0c10;border:1px solid var(--line);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12.6px;line-height:1.6;color:#cdd6e3;
+    white-space:pre-wrap;word-break:break-word;
+    max-height:400px;overflow:auto;
+  }
+  #promptOut::-webkit-scrollbar{width:8px}
+  #promptOut::-webkit-scrollbar-thumb{background:#2c3442;border-radius:8px}
+  .meta{font-size:11.5px;color:var(--muted);margin:9px 2px 13px;display:flex;justify-content:space-between}
+  .preview .row-actions .btn{flex:1}
+  .preview .row-actions .btn.primary{flex:1.6}
+
+  /* ---------- FAVORITOS ---------- */
+  .favs{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}
+  .favs h3{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:0 0 10px;font-weight:700}
+  .fav{
+    display:flex;align-items:center;gap:10px;
+    background:var(--panel-2);border:1px solid var(--line);
+    border-radius:11px;padding:9px 10px;margin-bottom:8px;
+  }
+  .fav-label{flex:1;font-size:12.5px;color:#c3ccda;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fav-actions{display:flex;gap:4px;flex:none}
+  .iconbtn{
+    font:inherit;font-size:13px;cursor:pointer;border:none;background:transparent;
+    color:var(--muted);padding:5px 7px;border-radius:7px;transition:.14s;
+  }
+  .iconbtn:hover{background:#2b3342;color:var(--txt)}
+  .empty{font-size:12.5px;color:#67707e;font-style:italic}
+
+  /* ---------- BARRA MOBILE ---------- */
+  .mobilebar{display:none}
+  .toast{
+    position:fixed;left:50%;top:18px;transform:translate(-50%,-24px);
+    background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;
+    padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;
+    transition:.25s;z-index:200;box-shadow:0 8px 26px rgba(0,0,0,.4);
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- RESPONSIVO ---------- */
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr;padding:14px 12px 108px;gap:16px}
+    .top{padding:20px 14px 4px}
+    h1{font-size:18px}
+    .top p{font-size:13px}
+    .panel{padding:16px;border-radius:14px}
+    .preview{position:static}
+    #promptOut{max-height:none;font-size:12.2px}
+    .chip{font-size:13px;padding:9px 12px}
+    .mobilebar{
+      display:flex;gap:9px;position:fixed;left:0;right:0;bottom:0;z-index:100;
+      padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+      background:rgba(13,15,19,.93);backdrop-filter:blur(14px);
+      border-top:1px solid var(--line);
+    }
+    .mobilebar .btn{flex:1;padding:13px 14px}
+    .mobilebar .btn.primary{flex:2.4}
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">
+    <div class="logo">🖼️</div>
+    <div>
+      <h1>Gerador de Prompts para Pinturas</h1>
+      <p>Monte o prompt, copie e cole no Gemini <strong>junto com a foto da sua pintura anexada</strong>. O prompt sai em inglês e instrui o Gemini a não alterar a obra.</p>
+    </div>
+  </div>
+</div>
+
+<main class="layout">
+  <section class="panel">
+    <div id="cats"></div>
+    <div class="row-actions">
+      <button class="btn" id="btnRandom">🎲 Aleatório</button>
+      <button class="btn" id="btnReset">↺ Limpar</button>
+    </div>
+  </section>
+
+  <aside class="panel preview">
+    <div class="preview-head">
+      <h2>Prompt</h2>
+      <div class="seg" id="segMode">
+        <button class="segbtn on" data-mode="detail">Detalhado</button>
+        <button class="segbtn" data-mode="short">Conciso</button>
+      </div>
+    </div>
+
+    <pre id="promptOut"></pre>
+    <div class="meta">
+      <span id="charCount">0 caracteres</span>
+      <span>9:16 · inglês</span>
+    </div>
+
+    <div class="row-actions">
+      <button class="btn primary" id="btnCopy">📋 Copiar prompt</button>
+      <button class="btn" id="btnSave">⭐ Salvar</button>
+    </div>
+
+    <div class="favs">
+      <h3>Prompts salvos</h3>
+      <div id="favList"></div>
+    </div>
+  </aside>
+</main>
+
+<div class="mobilebar">
+  <button class="btn" id="mRandom">🎲</button>
+  <button class="btn primary" id="mCopy">📋 Copiar prompt</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   CATEGORIAS E OPÇÕES  (label = PT, en = trecho do prompt)
+   ============================================================ */
+const CATS = [
+  {
+    key:'scene', title:'Contexto / Cena', options:[
+      {id:'wall',    label:'Na parede',            en:'the attached painting hanging on a wall'},
+      {id:'hand1',   label:'Na mão (1 mão)',       en:'a person holding the attached painting with one hand'},
+      {id:'hand2',   label:'Nas duas mãos',        en:'a person holding the attached painting with both hands, presenting it to the camera'},
+      {id:'bench',   label:'Na bancada',           en:'the attached painting resting on a workbench or countertop'},
+      {id:'easel',   label:'No cavalete',          en:'the attached painting displayed on a wooden easel'},
+      {id:'sofa',    label:'Apoiada no sofá',      en:'the attached painting leaning against a sofa'},
+      {id:'table',   label:'Na mesa',              en:'the attached painting lying flat on a wooden table'},
+      {id:'desk',    label:'Na escrivaninha',      en:'the attached painting standing on a desk'},
+      {id:'floor',   label:'No chão encostada',    en:'the attached painting leaning on the floor against a wall'},
+      {id:'gallery', label:'Em galeria',           en:'the attached painting exhibited on a gallery wall'},
+      {id:'studio',  label:'No ateliê',            en:'the attached painting in an artist’s studio among brushes and paint tubes'},
+      {id:'gift',    label:'Sendo embrulhada',     en:'the attached painting being wrapped in kraft paper as a gift'},
+      {id:'crate',   label:'Em caixa de envio',    en:'the attached painting packed inside a wooden shipping crate'},
+      {id:'shelf',   label:'Na estante',           en:'the attached painting displayed on a wooden shelf'},
+      {id:'skip',    label:'Livre',                en:''}
+    ]
+  },
+  {
+    key:'frame', title:'Moldura', options:[
+      {id:'canvas',    label:'Sem moldura (tela)',   en:'the painting is unframed, shown as a stretched canvas with clean painted edges'},
+      {id:'blackthin', label:'Preta fina',           en:'the painting is set in a thin matte black frame'},
+      {id:'wood',      label:'Madeira natural',      en:'the painting is set in a natural light oak frame'},
+      {id:'gold',      label:'Dourada clássica',     en:'the painting is set in an ornate classic gold frame'},
+      {id:'white',     label:'Branca minimalista',   en:'the painting is set in a minimalist white frame'},
+      {id:'floating',  label:'Flutuante',            en:'the painting is set in a slim floating frame with a visible gap'},
+      {id:'glass',     label:'Com vidro',            en:'the painting is framed behind glass with a subtle reflection'},
+      {id:'blackwide', label:'Preta larga',          en:'the painting is set in a wide matte black gallery frame'},
+      {id:'skip',      label:'Não especificar',      en:''}
+    ]
+  },
+  {
+    key:'environment', title:'Ambiente', options:[
+      {id:'living',   label:'Sala moderna',      en:'a bright modern living room with neutral tones'},
+      {id:'cozy',     label:'Sala aconchegante', en:'a cozy living room with warm textures and plants'},
+      {id:'office',   label:'Home office',       en:'a contemporary home office'},
+      {id:'bedroom',  label:'Quarto',            en:'a calm minimalist bedroom'},
+      {id:'dining',   label:'Sala de jantar',    en:'an elegant dining room'},
+      {id:'kitchen',  label:'Cozinha',           en:'a bright kitchen with a marble countertop'},
+      {id:'gallery',  label:'Galeria de arte',   en:'a clean white art gallery'},
+      {id:'studio',   label:'Ateliê',            en:'an artist’s studio with natural textures and materials'},
+      {id:'cafe',     label:'Café',              en:'a cozy café interior'},
+      {id:'hallway',  label:'Corredor',          en:'a hallway with a console table'},
+      {id:'loft',     label:'Loft industrial',   en:'an industrial loft with exposed brick walls'},
+      {id:'backdrop', label:'Fundo neutro',      en:'a clean neutral studio backdrop'},
+      {id:'wallart',  label:'Parede com quadros',en:'a gallery wall with other framed artworks'},
+      {id:'skip',     label:'Não especificar',   en:''}
+    ]
+  },
+  {
+    key:'lighting', title:'Iluminação', options:[
+      {id:'window',    label:'Luz natural',       en:'soft natural daylight coming from a nearby window'},
+      {id:'golden',    label:'Golden hour',       en:'warm golden hour sunlight with soft long shadows'},
+      {id:'studio',    label:'Luz de estúdio',    en:'bright, even studio lighting'},
+      {id:'side',      label:'Luz lateral',       en:'dramatic side lighting with deep soft shadows'},
+      {id:'diffuse',   label:'Luz difusa',        en:'soft diffused overcast light'},
+      {id:'lamp',      label:'Luz de abajur',     en:'warm ambient lamp light'},
+      {id:'spotlight', label:'Spots de galeria',  en:'gallery spotlights highlighting the artwork'},
+      {id:'cool',      label:'Luz fria',          en:'cool crisp daylight'},
+      {id:'skip',      label:'Não especificar',   en:''}
+    ]
+  },
+  {
+    key:'style', title:'Estilo fotográfico', options:[
+      {id:'product',  label:'Foto de produto',        en:'professional product photography'},
+      {id:'editorial',label:'Editorial lifestyle',    en:'lifestyle editorial photography'},
+      {id:'interior', label:'Revista de decoração',   en:'interior design magazine photography'},
+      {id:'instagram',label:'Instagram aesthetic',    en:'Instagram aesthetic photography'},
+      {id:'arch',     label:'Arquitetônica',          en:'architectural photography'},
+      {id:'mockup',   label:'Mockup realista',        en:'a realistic photo mockup'},
+      {id:'film',     label:'Filme 35mm',             en:'35mm film photography'},
+      {id:'candid',   label:'Documental / candid',    en:'candid documentary photography'},
+      {id:'skip',     label:'Não especificar',        en:''}
+    ]
+  },
+  {
+    key:'angle', title:'Ângulo / Enquadramento', options:[
+      {id:'frontal', label:'Frontal',            en:'straight-on frontal view'},
+      {id:'angled',  label:'Levemente inclinado',en:'slightly angled three-quarter view'},
+      {id:'close',   label:'Close na obra',      en:'close-up shot focusing on the artwork'},
+      {id:'wide',    label:'Plano aberto',       en:'wide shot showing the full room context'},
+      {id:'eye',     label:'Nível dos olhos',    en:'eye-level perspective'},
+      {id:'topdown', label:'Vista de cima',      en:'top-down flat lay view'},
+      {id:'low',     label:'Contra-plongée',     en:'low angle perspective'},
+      {id:'skip',    label:'Não especificar',    en:''}
+    ]
+  },
+  {
+    key:'extras', title:'Extras (pode marcar vários)', multi:true, options:[
+      {id:'texture',  label:'Textura da tela',        en:'visible canvas texture and brushwork'},
+      {id:'bokeh',    label:'Fundo desfocado',        en:'shallow depth of field with a softly blurred background'},
+      {id:'shadows',  label:'Sombras realistas',      en:'realistic shadows, reflections and contact shadows'},
+      {id:'grain',    label:'Grão de filme',          en:'subtle film grain'},
+      {id:'negspace', label:'Espaço para texto',      en:'clean negative space above the artwork'},
+      {id:'minimal',  label:'Composição minimalista', en:'minimalist composition with plenty of empty space'},
+      {id:'decor',    label:'Objetos de decoração',   en:'a few tasteful decor details around the scene'},
+      {id:'noperson', label:'Sem pessoas',            en:'no people in the frame'}
+    ]
+  }
+];
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const DEFAULTS = {
+  scene:'wall', frame:'canvas', environment:'living',
+  lighting:'window', style:'product', angle:'frontal'
+};
+
+const state = Object.assign({}, DEFAULTS, { extras:new Set() });
+let mode = 'detail';
+let currentPrompt = '';
+
+const $ = s => document.querySelector(s);
+const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+
+/* ============================================================
+   RENDER DAS CATEGORIAS
+   ============================================================ */
+function renderCategories(){
+  const wrap = $('#cats');
+  wrap.innerHTML = '';
+  CATS.forEach(cat => {
+    const sec = document.createElement('section');
+    sec.className = 'cat';
+    const h = document.createElement('h3');
+    h.textContent = cat.title;
+    sec.appendChild(h);
+
+    const chips = document.createElement('div');
+    chips.className = 'chips';
+
+    cat.options.forEach(opt => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip';
+      b.dataset.cat = cat.key;
+      b.dataset.id = opt.id;
+      b.textContent = opt.label;
+      b.addEventListener('click', () => select(cat, opt.id));
+      chips.appendChild(b);
+    });
+
+    sec.appendChild(chips);
+    wrap.appendChild(sec);
+  });
+  syncChips();
+}
+
+function select(cat, id){
+  if (cat.multi){
+    if (state[cat.key].has(id)) state[cat.key].delete(id);
+    else state[cat.key].add(id);
+  } else {
+    state[cat.key] = id;
+  }
+  syncChips();
+  update();
+}
+
+function syncChips(){
+  document.querySelectorAll('.chip').forEach(b => {
+    const cat = CATS.find(c => c.key === b.dataset.cat);
+    const on = cat.multi
+      ? state[cat.key].has(b.dataset.id)
+      : state[cat.key] === b.dataset.id;
+    b.classList.toggle('on', on);
+  });
+}
+
+/* ============================================================
+   HELPERS DE CONTEÚDO
+   ============================================================ */
+function optEn(catKey, id){
+  const cat = CATS.find(c => c.key === catKey);
+  const opt = cat.options.find(o => o.id === id);
+  return opt ? opt.en : '';
+}
+function optLabel(catKey, id){
+  const cat = CATS.find(c => c.key === catKey);
+  const opt = cat.options.find(o => o.id === id);
+  return opt ? opt.label : '';
+}
+
+/* ============================================================
+   MONTAGEM DO PROMPT
+   ============================================================ */
+function buildPrompt(){
+  const scene = optEn('scene', state.scene) || 'the attached painting';
+  const frame = optEn('frame', state.frame);
+  const env   = optEn('environment', state.environment);
+  const light = optEn('lighting', state.lighting);
+  const style = optEn('style', state.style);
+  const angle = optEn('angle', state.angle);
+  const extras = [...state.extras].map(id => optEn('extras', id)).filter(Boolean);
+
+  if (mode === 'short'){
+    const p = [`Photorealistic 9:16 vertical photo of ${scene}.`];
+    if (frame) p.push(cap(frame) + '.');
+    if (env)   p.push(`Setting: ${env}.`);
+    if (light) p.push(`Lighting: ${light}.`);
+    if (style) p.push(cap(style) + '.');
+    if (angle) p.push(`Camera angle: ${angle}.`);
+    if (extras.length) p.push(cap(extras.join('; ')) + '.');
+    p.push('The attached painting must remain exactly identical to the original — do not alter, recolor, crop, stretch or restyle the artwork; only integrate it realistically into the scene.');
+    p.push('No text, no watermark, no signature. Aspect ratio 9:16.');
+    return p.join(' ');
+  }
+
+  const L = [];
+  L.push(`Create a photorealistic 9:16 vertical image of ${scene}.`);
+  L.push('');
+  L.push('SCENE SETUP:');
+  if (frame) L.push(`- Frame: ${frame}`);
+  if (env)   L.push(`- Setting: ${env}`);
+  if (light) L.push(`- Lighting: ${light}`);
+  if (style) L.push(`- Photography style: ${style}`);
+  if (angle) L.push(`- Camera angle: ${angle}`);
+  if (extras.length) L.push(`- Additional details: ${extras.join('; ')}`);
+  L.push('');
+  L.push('CRITICAL — DO NOT ALTER THE ARTWORK:');
+  L.push('The attached painting must stay exactly as in the original reference: same composition, colors, shapes, proportions, brushstrokes and details. Do NOT repaint, restyle, recolor, crop, stretch, blur or "improve" it. Do NOT add or remove any element inside the painting. It must remain 100% recognizable and faithful to the original artwork. Only integrate it realistically into the described scene, with correct perspective, scale, lighting and shadows.');
+  L.push('');
+  L.push('No text, no watermark, no signature, no extra logos. Ultra-detailed, sharp focus, high resolution, aspect ratio 9:16.');
+  return L.join('\n');
+}
+
+/* ============================================================
+   UPDATE / UI
+   ============================================================ */
+function update(){
+  currentPrompt = buildPrompt();
+  $('#promptOut').textContent = currentPrompt;
+  $('#charCount').textContent = currentPrompt.length.toLocaleString('pt-BR') + ' caracteres';
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastTimer;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
+}
+
+/* ============================================================
+   COPIAR
+   ============================================================ */
+async function copyPrompt(){
+  const text = currentPrompt;
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('Prompt copiado! ✓');
+  } catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); toast('Prompt copiado! ✓'); }
+    catch(_) { toast('Não foi possível copiar'); }
+    ta.remove();
+  }
+}
+
+/* ============================================================
+   ALEATÓRIO / LIMPAR
+   ============================================================ */
+function randomize(){
+  CATS.forEach(cat => {
+    if (cat.multi){
+      state[cat.key] = new Set();
+      const pool = cat.options.filter(o => o.id !== 'skip');
+      const n = Math.floor(Math.random() * 3); // 0 a 2 extras
+      const shuffled = [...pool].sort(() => Math.random() - 0.5);
+      shuffled.slice(0, n).forEach(o => state[cat.key].add(o.id));
+    } else {
+      const pool = cat.options;
+      const r = pool[Math.floor(Math.random() * pool.length)];
+      state[cat.key] = r.id;
+    }
+  });
+  syncChips();
+  update();
+  toast('Combinação aleatória 🎲');
+}
+
+function reset(){
+  Object.keys(DEFAULTS).forEach(k => state[k] = DEFAULTS[k]);
+  state.extras = new Set();
+  syncChips();
+  update();
+  toast('Opções limpas');
+}
+
+/* ============================================================
+   FAVORITOS (localStorage)
+   ============================================================ */
+const FAV_KEY = 'painting_prompts_favs_v1';
+
+function loadFavs(){
+  try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
+  catch(e){ return []; }
+}
+function persistFavs(list){
+  try { localStorage.setItem(FAV_KEY, JSON.stringify(list)); }
+  catch(e){ toast('Não foi possível salvar'); }
+}
+function favLabel(){
+  const parts = [
+    optLabel('scene', state.scene),
+    optLabel('frame', state.frame),
+    optLabel('style', state.style)
+  ].filter(p => p && p !== 'Livre' && p !== 'Não especificar');
+  return parts.join(' · ') || 'Prompt';
+}
+function saveFav(){
+  const list = loadFavs();
+  list.unshift({
+    id: Date.now(),
+    label: favLabel(),
+    text: currentPrompt
+  });
+  persistFavs(list.slice(0, 30));
+  renderFavs();
+  toast('Prompt salvo ⭐');
+}
+function deleteFav(id){
+  persistFavs(loadFavs().filter(f => f.id !== id));
+  renderFavs();
+}
+function renderFavs(){
+  const box = $('#favList');
+  const list = loadFavs();
+  box.innerHTML = '';
+  if (!list.length){
+    box.innerHTML = '<div class="empty">Nenhum prompt salvo ainda.</div>';
+    return;
+  }
+  list.forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'fav';
+
+    const label = document.createElement('div');
+    label.className = 'fav-label';
+    label.textContent = f.label;
+    label.title = f.text;
+
+    const actions = document.createElement('div');
+    actions.className = 'fav-actions';
+
+    const bCopy = document.createElement('button');
+    bCopy.className = 'iconbtn';
+    bCopy.textContent = '📋';
+    bCopy.title = 'Copiar';
+    bCopy.addEventListener('click', () => {
+      navigator.clipboard.writeText(f.text)
+        .then(() => toast('Prompt copiado! ✓'))
+        .catch(() => toast('Não foi possível copiar'));
+    });
+
+    const bDel = document.createElement('button');
+    bDel.className = 'iconbtn';
+    bDel.textContent = '✕';
+    bDel.title = 'Excluir';
+    bDel.addEventListener('click', () => deleteFav(f.id));
+
+    actions.appendChild(bCopy);
+    actions.appendChild(bDel);
+    row.appendChild(label);
+    row.appendChild(actions);
+    box.appendChild(row);
+  });
+}
+
+/* ============================================================
+   EVENTOS
+   ============================================================ */
+$('#btnCopy').addEventListener('click', copyPrompt);
+$('#mCopy').addEventListener('click', copyPrompt);
+$('#btnSave').addEventListener('click', saveFav);
+$('#btnRandom').addEventListener('click', randomize);
+$('#mRandom').addEventListener('click', randomize);
+$('#btnReset').addEventListener('click', reset);
+
+$('#segMode').addEventListener('click', e => {
+  const b = e.target.closest('.segbtn');
+  if (!b) return;
+  mode = b.dataset.mode;
+  document.querySelectorAll('.segbtn').forEach(x => x.classList.toggle('on', x === b));
+  update();
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderCategories();
+renderFavs();
+update();
+</script>
+</body>
+</html>
