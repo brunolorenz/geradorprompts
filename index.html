@@ -6,216 +6,246 @@
 <title>Gerador de Prompts — Pinturas</title>
 <style>
   :root{
-    --bg:#0d0f13;
-    --panel:#151920;
-    --panel-2:#1b202a;
-    --line:#272e3a;
-    --txt:#e9edf3;
-    --muted:#8f9aab;
-    --accent:#e3a94f;
-    --accent-2:#f2c882;
-    --accent-ink:#1a1206;
+    --bg:#0d0f13; --panel:#151920; --panel-2:#1b202a; --line:#272e3a;
+    --txt:#e9edf3; --muted:#8f9aab;
+    --accent:#e3a94f; --accent-2:#f2c882; --accent-ink:#1a1206;
+    --code-bg:#0a0c10; --code-txt:#cdd6e3;
     --radius:16px;
+  }
+  [data-theme="light"]{
+    --bg:#eef0f4; --panel:#ffffff; --panel-2:#f4f5f8; --line:#e0e2e8;
+    --txt:#1a1c22; --muted:#6c7280;
+    --accent:#c07d1a; --accent-2:#e3a94f; --accent-ink:#ffffff;
+    --code-bg:#f7f8fb; --code-txt:#2a2d36;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background:var(--bg); color:var(--txt);
+    min-height:100vh; -webkit-font-smoothing:antialiased;
+    transition: background .2s, color .2s;
+  }
+  [data-theme="dark"] body{
     background:
       radial-gradient(900px 520px at 82% -12%, rgba(227,169,79,.11), transparent 60%),
       radial-gradient(760px 420px at -5% 0%, rgba(90,140,255,.08), transparent 55%),
       var(--bg);
-    color:var(--txt);
-    min-height:100vh;
-    -webkit-font-smoothing:antialiased;
   }
 
-  /* ---------- HEADER ---------- */
-  .top{max-width:1260px;margin:0 auto;padding:26px 20px 6px}
-  .brand{display:flex;gap:14px;align-items:flex-start}
+  /* HEADER */
+  .top{max-width:1260px;margin:0 auto;padding:20px 20px 6px;display:flex;align-items:flex-start;gap:14px}
+  .brand{display:flex;gap:14px;align-items:flex-start;flex:1}
   .logo{
-    width:48px;height:48px;border-radius:14px;flex:none;display:grid;place-items:center;font-size:23px;
+    width:46px;height:46px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:22px;
     background:linear-gradient(145deg,#e8b65f,#a9711f);
     box-shadow:0 8px 24px rgba(227,169,79,.28);
   }
-  h1{font-size:20px;margin:0 0 5px;letter-spacing:-.015em}
-  .top p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55;max-width:660px}
+  h1{font-size:19px;margin:0 0 4px;letter-spacing:-.015em}
+  .top p{margin:0;color:var(--muted);font-size:13px;line-height:1.5;max-width:600px}
+  .top-actions{display:flex;gap:6px;flex:none;padding-top:2px}
+  .iconbtn-top{
+    width:40px;height:40px;border-radius:11px;border:1px solid var(--line);
+    background:var(--panel);color:var(--txt);font-size:17px;cursor:pointer;
+    transition:.14s;-webkit-tap-highlight-color:transparent;
+  }
+  .iconbtn-top:hover{background:var(--panel-2);border-color:#3b465a}
 
-  /* ---------- LAYOUT ---------- */
+  /* LAYOUT */
   .layout{
     max-width:1260px;margin:0 auto;padding:18px 20px 40px;
-    display:grid;grid-template-columns:minmax(0,1fr) 442px;gap:22px;align-items:start;
+    display:grid;grid-template-columns:minmax(0,1fr) 460px;gap:22px;align-items:start;
   }
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
 
-  /* ---------- CATEGORIAS ---------- */
-  .cat{margin-bottom:22px}
-  .cat:last-child{margin-bottom:8px}
-  .cat h3{
-    font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;
-    color:var(--muted);margin:0 0 11px;font-weight:700;
+  /* PAINTING INFO */
+  .painting-info{margin-bottom:18px}
+  .painting-info h3{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:0 0 14px;font-weight:700}
+  .field{margin-bottom:12px}
+  .field:last-child{margin-bottom:0}
+  .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .field input[type="text"], .field select{
+    width:100%;font:inherit;font-size:13.5px;padding:9px 12px;border-radius:9px;
+    border:1px solid var(--line);background:var(--panel-2);color:var(--txt);
+    transition:border-color .14s;
   }
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .field input[type="text"]:focus, .field select:focus{outline:none;border-color:var(--accent)}
+  .field input[type="range"]{width:100%;accent-color:var(--accent);margin:4px 0}
+  .slider-labels{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-top:2px}
+  .chips-small{display:flex;gap:6px;flex-wrap:wrap}
+  .chips-small button{
+    font:inherit;font-size:12px;padding:6px 12px;border-radius:8px;
+    border:1px solid var(--line);background:var(--panel-2);color:var(--txt);cursor:pointer;transition:.14s;
+  }
+  .chips-small button:hover{border-color:#3b465a}
+  .chips-small button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+
+  /* CATEGORIAS */
+  .cat{margin-bottom:20px}
+  .cat:last-of-type{margin-bottom:0}
+  .cat h3{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:0 0 10px;font-weight:700}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
   .chip{
-    font:inherit;font-size:13.5px;line-height:1;
-    padding:9px 14px;border-radius:999px;cursor:pointer;
-    background:var(--panel-2);color:var(--txt);
-    border:1px solid var(--line);
-    transition:background .14s, border-color .14s, transform .14s, color .14s;
-    -webkit-tap-highlight-color:transparent;
+    font:inherit;font-size:13px;line-height:1;padding:8px 13px;border-radius:999px;cursor:pointer;
+    background:var(--panel-2);color:var(--txt);border:1px solid var(--line);
+    transition:.14s;-webkit-tap-highlight-color:transparent;
   }
   .chip:hover{border-color:#3b465a;transform:translateY(-1px)}
   .chip:active{transform:translateY(0)}
-  .chip.on{
-    background:linear-gradient(145deg,var(--accent-2),var(--accent));
-    border-color:var(--accent);color:var(--accent-ink);font-weight:700;
-    box-shadow:0 4px 14px rgba(227,169,79,.22);
-  }
+  .chip.on{background:linear-gradient(145deg,var(--accent-2),var(--accent));border-color:var(--accent);color:var(--accent-ink);font-weight:700}
 
-  /* ---------- BOTÕES ---------- */
-  .row-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
+  /* BOTÕES */
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
   .btn{
-    font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
-    padding:11px 16px;border-radius:11px;border:1px solid var(--line);
-    background:var(--panel-2);color:var(--txt);
-    transition:.14s;-webkit-tap-highlight-color:transparent;
-    display:inline-flex;align-items:center;gap:7px;justify-content:center;
+    font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    padding:10px 15px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--txt);transition:.14s;
+    display:inline-flex;align-items:center;gap:6px;justify-content:center;
+    -webkit-tap-highlight-color:transparent;
   }
   .btn:hover{border-color:#3b465a;transform:translateY(-1px)}
-  .btn:active{transform:translateY(0)}
-  .btn.primary{
-    background:linear-gradient(145deg,var(--accent-2),var(--accent));
-    color:var(--accent-ink);border-color:var(--accent);
-    box-shadow:0 6px 18px rgba(227,169,79,.22);
-  }
-  .btn.primary:hover{filter:brightness(1.05)}
-  .btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+  .btn.primary{background:linear-gradient(145deg,var(--accent-2),var(--accent));color:var(--accent-ink);border-color:var(--accent);box-shadow:0 6px 18px rgba(227,169,79,.22)}
+  .btn.ghost{background:transparent;border-color:transparent;color:var(--muted);font-size:12px;padding:8px 10px}
   .btn.ghost:hover{background:var(--panel-2);color:var(--txt)}
-  .btn.small{font-size:12px;padding:8px 12px;border-radius:9px;width:100%;margin-top:8px}
+  .btn.small{font-size:12px;padding:8px 12px;border-radius:9px}
+  .btn.danger{color:#ff8686;border-color:rgba(220,80,80,.3)}
+  .btn.danger:hover{background:rgba(220,80,80,.1);border-color:#ff8686}
+  .btn.danger-solid{background:#c94a4a;color:#fff;border-color:#c94a4a}
+  .btn.danger-solid:hover{background:#b13a3a}
 
-  /* ---------- PREVIEW ---------- */
-  .preview{
-    position:sticky;top:20px;
-    max-height:calc(100vh - 40px);
-    overflow-y:auto;
-    scrollbar-width:thin;
-    scrollbar-color:#2c3442 transparent;
-  }
+  /* PREVIEW */
+  .preview{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#2c3442 transparent}
   .preview::-webkit-scrollbar{width:7px}
   .preview::-webkit-scrollbar-thumb{background:#2c3442;border-radius:8px}
-  .preview::-webkit-scrollbar-track{background:transparent}
-
-  .preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-  .preview-head h2{font-size:15px;margin:0;letter-spacing:-.01em}
+  .preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .preview-head h2{font-size:15px;margin:0}
   .seg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
-  .segbtn{
-    font:inherit;font-size:11.5px;font-weight:600;cursor:pointer;
-    padding:6px 11px;border-radius:7px;border:none;background:transparent;color:var(--muted);
-    transition:.14s;
-  }
-  .segbtn.on{background:#2b3342;color:var(--txt)}
+  .segbtn{font:inherit;font-size:11.5px;font-weight:600;cursor:pointer;padding:6px 11px;border-radius:7px;border:none;background:transparent;color:var(--muted);transition:.14s}
+  .segbtn.on{background:var(--panel);color:var(--txt);box-shadow:0 1px 3px rgba(0,0,0,.15)}
   #promptOut{
-    margin:0;padding:15px;border-radius:12px;
-    background:#0a0c10;border:1px solid var(--line);
+    margin:0;padding:14px;border-radius:11px;background:var(--code-bg);border:1px solid var(--line);
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:12.6px;line-height:1.6;color:#cdd6e3;
-    white-space:pre-wrap;word-break:break-word;
-    max-height:340px;overflow:auto;
+    font-size:12.4px;line-height:1.55;color:var(--code-txt);
+    white-space:pre-wrap;word-break:break-word;max-height:300px;overflow:auto;
   }
-  #promptOut::-webkit-scrollbar{width:8px}
-  #promptOut::-webkit-scrollbar-thumb{background:#2c3442;border-radius:8px}
-  .meta{font-size:11.5px;color:var(--muted);margin:9px 2px 13px;display:flex;justify-content:space-between}
-  .preview .row-actions .btn{flex:1}
-  .preview .row-actions .btn.primary{flex:1.6}
+  .meta{font-size:11.5px;color:var(--muted);margin:8px 2px 11px;display:flex;justify-content:space-between;gap:8px}
+  .meta .aspect-badge{background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-weight:600;color:var(--txt)}
 
-  /* ---------- BLOCOS COLAPSÁVEIS (favs/histórico) ---------- */
-  details.block{
-    margin-top:16px;border-top:1px solid var(--line);padding-top:14px;
-  }
+  /* BLOCOS COLAPSÁVEIS */
+  details.block{margin-top:14px;border-top:1px solid var(--line);padding-top:13px}
   details.block summary{
     cursor:pointer;font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;
     color:var(--muted);font-weight:700;list-style:none;
-    display:flex;align-items:center;gap:9px;user-select:none;padding:3px 0;
+    display:flex;align-items:center;gap:8px;user-select:none;padding:2px 0;
     -webkit-tap-highlight-color:transparent;
   }
   details.block summary::-webkit-details-marker{display:none}
-  details.block summary::before{
-    content:'▸';display:inline-block;font-size:10px;color:var(--muted);
-    transition:transform .15s;
-  }
+  details.block summary::before{content:'▸';font-size:10px;transition:transform .15s}
   details.block[open] summary::before{transform:rotate(90deg)}
-  details.block summary .count{
+  .count{
     background:var(--panel-2);border:1px solid var(--line);border-radius:999px;
     padding:2px 8px;font-size:10.5px;letter-spacing:0;text-transform:none;
     color:var(--muted);font-weight:600;margin-left:auto;
   }
-  .listbox{
-    max-height:220px;overflow-y:auto;margin-top:10px;
-    scrollbar-width:thin;scrollbar-color:#2c3442 transparent;padding-right:2px;
-  }
+  .listbox{max-height:220px;overflow-y:auto;margin-top:9px;scrollbar-width:thin;scrollbar-color:#2c3442 transparent;padding-right:2px}
   .listbox::-webkit-scrollbar{width:6px}
   .listbox::-webkit-scrollbar-thumb{background:#2c3442;border-radius:6px}
 
-  /* ---------- ITENS (favoritos + histórico) ---------- */
-  .fav, .hist-item{
-    display:flex;align-items:center;gap:10px;
+  /* ITENS */
+  .item{
+    display:flex;align-items:center;gap:9px;
     background:var(--panel-2);border:1px solid var(--line);
-    border-radius:11px;padding:9px 10px;margin-bottom:8px;
+    border-radius:10px;padding:8px 9px;margin-bottom:7px;
   }
-  .hist-item{align-items:flex-start}
-  .fav-label, .hist-label{
-    flex:1;font-size:12.5px;color:#c3ccda;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  }
-  .hist-info{flex:1;min-width:0}
-  .hist-time{
-    font-size:10.5px;color:var(--muted);margin-top:3px;
-    display:flex;align-items:center;gap:6px;
-  }
-  .mode-badge{
-    font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-    padding:1px 6px;border-radius:4px;
-  }
+  .item-label{flex:1;font-size:12.5px;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .item-time{font-size:10.5px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:6px}
+  .mode-badge{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:4px}
   .mode-badge.detail{background:rgba(227,169,79,.16);color:var(--accent)}
   .mode-badge.short{background:rgba(90,140,255,.16);color:#7aa6ff}
-  .fav-actions{display:flex;gap:2px;flex:none}
-  .iconbtn{
-    font:inherit;font-size:13px;cursor:pointer;border:none;background:transparent;
-    color:var(--muted);padding:5px 7px;border-radius:7px;transition:.14s;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .iconbtn:hover{background:#2b3342;color:var(--txt)}
+  .item-actions{display:flex;gap:2px;flex:none}
+  .iconbtn{font:inherit;font-size:13px;cursor:pointer;border:none;background:transparent;color:var(--muted);padding:5px 7px;border-radius:7px;transition:.14s}
+  .iconbtn:hover{background:rgba(255,255,255,.06);color:var(--txt)}
   .iconbtn.danger:hover{background:rgba(220,80,80,.15);color:#ff8686}
-  .empty{font-size:12.5px;color:#67707e;font-style:italic;padding:6px 2px}
+  .empty{font-size:12.5px;color:var(--muted);font-style:italic;padding:6px 2px}
+  .hist-search{
+    width:100%;font:inherit;font-size:12.5px;padding:7px 11px;border-radius:8px;
+    border:1px solid var(--line);background:var(--panel-2);color:var(--txt);margin-top:9px;
+  }
+  .hist-search:focus{outline:none;border-color:var(--accent)}
 
-  /* ---------- BARRA MOBILE ---------- */
+  /* MOBILE BAR */
   .mobilebar{display:none}
   .toast{
     position:fixed;left:50%;top:18px;transform:translate(-50%,-24px);
     background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;
     padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;
-    transition:.25s;z-index:200;box-shadow:0 8px 26px rgba(0,0,0,.4);
+    transition:.25s;z-index:400;box-shadow:0 8px 26px rgba(0,0,0,.4);max-width:90vw;text-align:center;
   }
   .toast.show{opacity:1;transform:translate(-50%,0)}
 
-  /* ---------- RESPONSIVO ---------- */
+  /* MODAL */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);
+    z-index:300;display:none;align-items:center;justify-content:center;padding:18px;
+  }
+  .modal-overlay.open{display:flex;animation:fadeIn .16s}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .modal{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;
+    max-width:600px;width:100%;max-height:88vh;overflow-y:auto;
+    box-shadow:0 24px 60px rgba(0,0,0,.5);
+    animation:slideUp .2s;
+  }
+  @keyframes slideUp{from{transform:translateY(12px);opacity:.7}to{transform:translateY(0);opacity:1}}
+  .modal h3{margin:0 0 14px;font-size:17px;letter-spacing:-.01em}
+  .modal p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 16px}
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+  .modal-field{width:100%;font:inherit;font-size:14px;padding:10px 13px;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--txt);margin-bottom:14px}
+  .modal-field:focus{outline:none;border-color:var(--accent)}
+
+  /* BATCH MODAL */
+  .batch-item{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;margin-bottom:8px;
+  }
+  .batch-head{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+  .batch-num{
+    width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+    display:grid;place-items:center;font-size:11px;font-weight:700;flex:none;
+  }
+  .batch-label{flex:1;font-size:12.5px;font-weight:600;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .batch-prompt{
+    font-family:ui-monospace,monospace;font-size:11px;line-height:1.5;
+    color:var(--code-txt);max-height:80px;overflow-y:auto;
+    background:var(--code-bg);border-radius:6px;padding:8px;border:1px solid var(--line);
+  }
+
+  /* SETTINGS */
+  .settings-section{margin-bottom:22px}
+  .settings-section h4{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:0 0 10px;font-weight:700}
+  .settings-row{display:flex;gap:6px;flex-wrap:wrap}
+  .settings-cat{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;cursor:pointer;user-select:none}
+  .settings-cat input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer}
+  .settings-stat{font-size:12.5px;color:var(--muted);padding:6px 0}
+
+  /* RESPONSIVO */
   @media (max-width:980px){
-    .layout{grid-template-columns:1fr;padding:14px 12px 108px;gap:16px}
-    .top{padding:20px 14px 4px}
-    h1{font-size:18px}
-    .top p{font-size:13px}
-    .panel{padding:16px;border-radius:14px}
+    .top{padding:16px 14px 4px;flex-wrap:wrap}
+    h1{font-size:17px}
+    .top p{font-size:12.5px}
+    .layout{grid-template-columns:1fr;padding:14px 12px 108px;gap:14px}
+    .panel{padding:15px;border-radius:13px}
     .preview{position:static;max-height:none;overflow:visible}
-    #promptOut{max-height:none;font-size:12.2px}
-    .chip{font-size:13px;padding:9px 12px}
-    .listbox{max-height:280px}
+    #promptOut{max-height:none}
+    .chip{font-size:12.5px;padding:8px 12px}
     .mobilebar{
-      display:flex;gap:9px;position:fixed;left:0;right:0;bottom:0;z-index:100;
-      padding:10px 12px calc(10px + env(safe-area-inset-bottom));
-      background:rgba(13,15,19,.93);backdrop-filter:blur(14px);
+      display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:100;
+      padding:9px 11px calc(9px + env(safe-area-inset-bottom));
+      background:rgba(13,15,19,.94);backdrop-filter:blur(14px);
       border-top:1px solid var(--line);
     }
-    .mobilebar .btn{flex:1;padding:13px 14px}
+    [data-theme="light"] .mobilebar{background:rgba(255,255,255,.94)}
+    .mobilebar .btn{flex:1;padding:12px 12px}
     .mobilebar .btn.primary{flex:2.4}
   }
 </style>
@@ -227,17 +257,53 @@
     <div class="logo">🖼️</div>
     <div>
       <h1>Gerador de Prompts para Pinturas</h1>
-      <p>Monte o prompt, copie e cole no Gemini <strong>junto com a foto da sua pintura anexada</strong>. O prompt sai em inglês e instrui o Gemini a não alterar a obra.</p>
+      <p>Monte o prompt, copie e cole no Gemini <strong>junto com a foto da sua pintura anexada</strong>. Sai em inglês e instrui o Gemini a preservar a obra.</p>
     </div>
+  </div>
+  <div class="top-actions">
+    <button class="iconbtn-top" id="btnTheme" title="Tema">🌙</button>
+    <button class="iconbtn-top" id="btnSettings" title="Configurações">⚙️</button>
   </div>
 </div>
 
 <main class="layout">
-  <section class="panel">
-    <div id="cats"></div>
-    <div class="row-actions">
-      <button class="btn" id="btnRandom">🎲 Aleatório</button>
-      <button class="btn" id="btnReset">↺ Limpar</button>
+  <section>
+    <div class="panel painting-info">
+      <h3>Informações da pintura</h3>
+      <div class="field">
+        <label for="paintingDesc">Descrição (opcional)</label>
+        <input type="text" id="paintingDesc" placeholder="ex: abstrato azul, pinceladas grossas">
+      </div>
+      <div class="field">
+        <label for="paintingSize">Tamanho</label>
+        <select id="paintingSize">
+          <option value="">Não especificar</option>
+          <option value="small">Pequena (até 30 cm)</option>
+          <option value="medium">Média (30–60 cm)</option>
+          <option value="large">Grande (60–100 cm)</option>
+          <option value="xl">Muito grande (100 cm+)</option>
+          <option value="custom">Personalizada…</option>
+        </select>
+        <input type="text" id="paintingSizeCustom" placeholder="ex: 50 × 70 cm" style="display:none;margin-top:8px">
+      </div>
+      <div class="field">
+        <label>Orientação da obra</label>
+        <div class="chips-small" id="orientationChips">
+          <button data-orient="auto" class="on">Auto</button>
+          <button data-orient="portrait">Retrato</button>
+          <button data-orient="landscape">Paisagem</button>
+          <button data-orient="square">Quadrada</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div id="cats"></div>
+      <div class="row-actions">
+        <button class="btn" id="btnRandom">🎲 Aleatório</button>
+        <button class="btn" id="btnReset">↺ Limpar</button>
+        <button class="btn" id="btnBatch">✨ Gerar 6 variações</button>
+      </div>
     </div>
   </section>
 
@@ -253,23 +319,67 @@
     <pre id="promptOut"></pre>
     <div class="meta">
       <span id="charCount">0 caracteres</span>
-      <span>9:16 · inglês</span>
+      <span class="aspect-badge" id="aspectLabel">9:16</span>
     </div>
 
     <div class="row-actions">
       <button class="btn primary" id="btnCopy">📋 Copiar prompt</button>
       <button class="btn" id="btnSave">⭐ Salvar</button>
+      <button class="btn" id="btnSavePreset">📌 Preset</button>
     </div>
 
-    <details class="block" open>
-      <summary>⭐ Prompts salvos <span class="count" id="favCount">0</span></summary>
+    <details class="block">
+      <summary>⚙️ Avançado</summary>
+      <div class="field" style="margin-top:12px">
+        <label>Proporção da imagem</label>
+        <div class="chips-small" id="aspectChips">
+          <button data-aspect="9:16" class="on">9:16</button>
+          <button data-aspect="4:5">4:5</button>
+          <button data-aspect="1:1">1:1</button>
+          <button data-aspect="16:9">16:9</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Preservação da obra</label>
+        <input type="range" min="1" max="3" step="1" id="preserveRange" value="2">
+        <div class="slider-labels"><span>Leve</span><span>Normal</span><span>Máxima</span></div>
+      </div>
+      <div class="field">
+        <label for="negativeInput">Negative prompt (opcional)</label>
+        <input type="text" id="negativeInput" placeholder="ex: text, watermark, distortion">
+      </div>
+      <div class="field">
+        <label for="contextInput">Contexto adicional (opcional)</label>
+        <input type="text" id="contextInput" placeholder="ex: tons quentes, ambiente aconchegante">
+      </div>
+    </details>
+
+    <details class="block">
+      <summary>⭐ Salvos <span class="count" id="favCount">0</span></summary>
       <div id="favList" class="listbox"></div>
     </details>
 
-    <details class="block" open>
+    <details class="block">
+      <summary>📌 Presets <span class="count" id="presetCount">0</span></summary>
+      <div id="presetList" class="listbox"></div>
+    </details>
+
+    <details class="block">
       <summary>🕒 Histórico <span class="count" id="histCount">0</span></summary>
+      <input type="text" id="histSearch" class="hist-search" placeholder="🔍 Buscar no histórico…">
       <div id="histList" class="listbox"></div>
-      <button class="btn ghost small" id="btnClearHist">🗑️ Limpar histórico</button>
+      <button class="btn ghost small" id="btnClearHist" style="width:100%">🗑️ Limpar histórico</button>
+    </details>
+
+    <details class="block">
+      <summary>💾 Backup</summary>
+      <div class="row-actions" style="margin-top:10px">
+        <button class="btn small" id="btnExport" style="flex:1">⬇️ Exportar</button>
+        <button class="btn small" id="btnImport" style="flex:1">⬆️ Importar</button>
+      </div>
+      <p style="font-size:11.5px;color:var(--muted);margin:9px 2px 0;line-height:1.5">
+        Salva favoritos, presets, histórico e configurações num arquivo .json.
+      </p>
     </details>
   </aside>
 </main>
@@ -279,251 +389,226 @@
   <button class="btn primary" id="mCopy">📋 Copiar prompt</button>
 </div>
 
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
 <div class="toast" id="toast"></div>
+<input type="file" id="fileInput" accept="application/json" style="display:none">
 
 <script>
 /* ============================================================
-   CATEGORIAS E OPÇÕES  (label = PT, en = trecho do prompt)
+   CONFIG
    ============================================================ */
 const CATS = [
-  {
-    key:'scene', title:'Contexto / Cena', options:[
-      {id:'wall',    label:'Na parede',            en:'the attached painting hanging on a wall'},
-      {id:'hand1',   label:'Na mão (1 mão)',       en:'a person holding the attached painting with one hand'},
-      {id:'hand2',   label:'Nas duas mãos',        en:'a person holding the attached painting with both hands, presenting it to the camera'},
-      {id:'bench',   label:'Na bancada',           en:'the attached painting resting on a workbench or countertop'},
-      {id:'easel',   label:'No cavalete',          en:'the attached painting displayed on a wooden easel'},
-      {id:'sofa',    label:'Apoiada no sofá',      en:'the attached painting leaning against a sofa'},
-      {id:'table',   label:'Na mesa',              en:'the attached painting lying flat on a wooden table'},
-      {id:'desk',    label:'Na escrivaninha',      en:'the attached painting standing on a desk'},
-      {id:'floor',   label:'No chão encostada',    en:'the attached painting leaning on the floor against a wall'},
-      {id:'gallery', label:'Em galeria',           en:'the attached painting exhibited on a gallery wall'},
-      {id:'studio',  label:'No ateliê',            en:'the attached painting in an artist’s studio among brushes and paint tubes'},
-      {id:'gift',    label:'Sendo embrulhada',     en:'the attached painting being wrapped in kraft paper as a gift'},
-      {id:'crate',   label:'Em caixa de envio',    en:'the attached painting packed inside a wooden shipping crate'},
-      {id:'shelf',   label:'Na estante',           en:'the attached painting displayed on a wooden shelf'},
-      {id:'skip',    label:'Livre',                en:''}
-    ]
-  },
-  {
-    key:'frame', title:'Moldura', options:[
-      {id:'canvas',    label:'Sem moldura (tela)',   en:'the painting is unframed, shown as a stretched canvas with clean painted edges'},
-      {id:'blackthin', label:'Preta fina',           en:'the painting is set in a thin matte black frame'},
-      {id:'wood',      label:'Madeira natural',      en:'the painting is set in a natural light oak frame'},
-      {id:'gold',      label:'Dourada clássica',     en:'the painting is set in an ornate classic gold frame'},
-      {id:'white',     label:'Branca minimalista',   en:'the painting is set in a minimalist white frame'},
-      {id:'floating',  label:'Flutuante',            en:'the painting is set in a slim floating frame with a visible gap'},
-      {id:'glass',     label:'Com vidro',            en:'the painting is framed behind glass with a subtle reflection'},
-      {id:'blackwide', label:'Preta larga',          en:'the painting is set in a wide matte black gallery frame'},
-      {id:'skip',      label:'Não especificar',      en:''}
-    ]
-  },
-  {
-    key:'environment', title:'Ambiente', options:[
-      {id:'living',   label:'Sala moderna',      en:'a bright modern living room with neutral tones'},
-      {id:'cozy',     label:'Sala aconchegante', en:'a cozy living room with warm textures and plants'},
-      {id:'office',   label:'Home office',       en:'a contemporary home office'},
-      {id:'bedroom',  label:'Quarto',            en:'a calm minimalist bedroom'},
-      {id:'dining',   label:'Sala de jantar',    en:'an elegant dining room'},
-      {id:'kitchen',  label:'Cozinha',           en:'a bright kitchen with a marble countertop'},
-      {id:'gallery',  label:'Galeria de arte',   en:'a clean white art gallery'},
-      {id:'studio',   label:'Ateliê',            en:'an artist’s studio with natural textures and materials'},
-      {id:'cafe',     label:'Café',              en:'a cozy café interior'},
-      {id:'hallway',  label:'Corredor',          en:'a hallway with a console table'},
-      {id:'loft',     label:'Loft industrial',   en:'an industrial loft with exposed brick walls'},
-      {id:'backdrop', label:'Fundo neutro',      en:'a clean neutral studio backdrop'},
-      {id:'wallart',  label:'Parede com quadros',en:'a gallery wall with other framed artworks'},
-      {id:'skip',     label:'Não especificar',   en:''}
-    ]
-  },
-  {
-    key:'lighting', title:'Iluminação', options:[
-      {id:'window',    label:'Luz natural',       en:'soft natural daylight coming from a nearby window'},
-      {id:'golden',    label:'Golden hour',       en:'warm golden hour sunlight with soft long shadows'},
-      {id:'studio',    label:'Luz de estúdio',    en:'bright, even studio lighting'},
-      {id:'side',      label:'Luz lateral',       en:'dramatic side lighting with deep soft shadows'},
-      {id:'diffuse',   label:'Luz difusa',        en:'soft diffused overcast light'},
-      {id:'lamp',      label:'Luz de abajur',     en:'warm ambient lamp light'},
-      {id:'spotlight', label:'Spots de galeria',  en:'gallery spotlights highlighting the artwork'},
-      {id:'cool',      label:'Luz fria',          en:'cool crisp daylight'},
-      {id:'skip',      label:'Não especificar',   en:''}
-    ]
-  },
-  {
-    key:'style', title:'Estilo fotográfico', options:[
-      {id:'product',  label:'Foto de produto',        en:'professional product photography'},
-      {id:'editorial',label:'Editorial lifestyle',    en:'lifestyle editorial photography'},
-      {id:'interior', label:'Revista de decoração',   en:'interior design magazine photography'},
-      {id:'instagram',label:'Instagram aesthetic',    en:'Instagram aesthetic photography'},
-      {id:'arch',     label:'Arquitetônica',          en:'architectural photography'},
-      {id:'mockup',   label:'Mockup realista',        en:'a realistic photo mockup'},
-      {id:'film',     label:'Filme 35mm',             en:'35mm film photography'},
-      {id:'candid',   label:'Documental / candid',    en:'candid documentary photography'},
-      {id:'skip',     label:'Não especificar',        en:''}
-    ]
-  },
-  {
-    key:'angle', title:'Ângulo / Enquadramento', options:[
-      {id:'frontal', label:'Frontal',            en:'straight-on frontal view'},
-      {id:'angled',  label:'Levemente inclinado',en:'slightly angled three-quarter view'},
-      {id:'close',   label:'Close na obra',      en:'close-up shot focusing on the artwork'},
-      {id:'wide',    label:'Plano aberto',       en:'wide shot showing the full room context'},
-      {id:'eye',     label:'Nível dos olhos',    en:'eye-level perspective'},
-      {id:'topdown', label:'Vista de cima',      en:'top-down flat lay view'},
-      {id:'low',     label:'Contra-plongée',     en:'low angle perspective'},
-      {id:'skip',    label:'Não especificar',    en:''}
-    ]
-  },
-  {
-    key:'extras', title:'Extras (pode marcar vários)', multi:true, options:[
-      {id:'texture',  label:'Textura da tela',        en:'visible canvas texture and brushwork'},
-      {id:'bokeh',    label:'Fundo desfocado',        en:'shallow depth of field with a softly blurred background'},
-      {id:'shadows',  label:'Sombras realistas',      en:'realistic shadows, reflections and contact shadows'},
-      {id:'grain',    label:'Grão de filme',          en:'subtle film grain'},
-      {id:'negspace', label:'Espaço para texto',      en:'clean negative space above the artwork'},
-      {id:'minimal',  label:'Composição minimalista', en:'minimalist composition with plenty of empty space'},
-      {id:'decor',    label:'Objetos de decoração',   en:'a few tasteful decor details around the scene'},
-      {id:'noperson', label:'Sem pessoas',            en:'no people in the frame'}
-    ]
-  }
+  { key:'scene', title:'Contexto / Cena', options:[
+    {id:'wall',    label:'Na parede',            en:'the attached painting hanging on a wall'},
+    {id:'hand1',   label:'Na mão (1 mão)',       en:'a person holding the attached painting with one hand'},
+    {id:'hand2',   label:'Nas duas mãos',        en:'a person holding the attached painting with both hands, presenting it to the camera'},
+    {id:'bench',   label:'Na bancada',           en:'the attached painting resting on a workbench or countertop'},
+    {id:'easel',   label:'No cavalete',          en:'the attached painting displayed on a wooden easel'},
+    {id:'sofa',    label:'Apoiada no sofá',      en:'the attached painting leaning against a sofa'},
+    {id:'table',   label:'Na mesa',              en:'the attached painting lying flat on a wooden table'},
+    {id:'desk',    label:'Na escrivaninha',      en:'the attached painting standing on a desk'},
+    {id:'floor',   label:'No chão encostada',    en:'the attached painting leaning on the floor against a wall'},
+    {id:'gallery', label:'Em galeria',           en:'the attached painting exhibited on a gallery wall'},
+    {id:'studio',  label:'No ateliê',            en:'the attached painting in an artist’s studio among brushes and paint tubes'},
+    {id:'gift',    label:'Sendo embrulhada',     en:'the attached painting being wrapped in kraft paper as a gift'},
+    {id:'crate',   label:'Em caixa de envio',    en:'the attached painting packed inside a wooden shipping crate'},
+    {id:'shelf',   label:'Na estante',           en:'the attached painting displayed on a wooden shelf'},
+    {id:'skip',    label:'Livre',                en:''}
+  ]},
+  { key:'frame', title:'Moldura', options:[
+    {id:'canvas',    label:'Sem moldura (tela)',   en:'the painting is unframed, shown as a stretched canvas with clean painted edges'},
+    {id:'blackthin', label:'Preta fina',           en:'the painting is set in a thin matte black frame'},
+    {id:'wood',      label:'Madeira natural',      en:'the painting is set in a natural light oak frame'},
+    {id:'gold',      label:'Dourada clássica',     en:'the painting is set in an ornate classic gold frame'},
+    {id:'white',     label:'Branca minimalista',   en:'the painting is set in a minimalist white frame'},
+    {id:'floating',  label:'Flutuante',            en:'the painting is set in a slim floating frame with a visible gap'},
+    {id:'glass',     label:'Com vidro',            en:'the painting is framed behind glass with a subtle reflection'},
+    {id:'blackwide', label:'Preta larga',          en:'the painting is set in a wide matte black gallery frame'},
+    {id:'skip',      label:'Não especificar',      en:''}
+  ]},
+  { key:'environment', title:'Ambiente', options:[
+    {id:'living',   label:'Sala moderna',      en:'a bright modern living room with neutral tones'},
+    {id:'cozy',     label:'Sala aconchegante', en:'a cozy living room with warm textures and plants'},
+    {id:'office',   label:'Home office',       en:'a contemporary home office'},
+    {id:'bedroom',  label:'Quarto',            en:'a calm minimalist bedroom'},
+    {id:'dining',   label:'Sala de jantar',    en:'an elegant dining room'},
+    {id:'kitchen',  label:'Cozinha',           en:'a bright kitchen with a marble countertop'},
+    {id:'gallery',  label:'Galeria de arte',   en:'a clean white art gallery'},
+    {id:'studio',   label:'Ateliê',            en:'an artist’s studio with natural textures and materials'},
+    {id:'cafe',     label:'Café',              en:'a cozy café interior'},
+    {id:'hallway',  label:'Corredor',          en:'a hallway with a console table'},
+    {id:'loft',     label:'Loft industrial',   en:'an industrial loft with exposed brick walls'},
+    {id:'backdrop', label:'Fundo neutro',      en:'a clean neutral studio backdrop'},
+    {id:'wallart',  label:'Parede com quadros',en:'a gallery wall with other framed artworks'},
+    {id:'skip',     label:'Não especificar',   en:''}
+  ]},
+  { key:'lighting', title:'Iluminação', options:[
+    {id:'window',    label:'Luz natural',       en:'soft natural daylight coming from a nearby window'},
+    {id:'golden',    label:'Golden hour',       en:'warm golden hour sunlight with soft long shadows'},
+    {id:'studio',    label:'Luz de estúdio',    en:'bright, even studio lighting'},
+    {id:'side',      label:'Luz lateral',       en:'dramatic side lighting with deep soft shadows'},
+    {id:'diffuse',   label:'Luz difusa',        en:'soft diffused overcast light'},
+    {id:'lamp',      label:'Luz de abajur',     en:'warm ambient lamp light'},
+    {id:'spotlight', label:'Spots de galeria',  en:'gallery spotlights highlighting the artwork'},
+    {id:'cool',      label:'Luz fria',          en:'cool crisp daylight'},
+    {id:'skip',      label:'Não especificar',   en:''}
+  ]},
+  { key:'style', title:'Estilo fotográfico', options:[
+    {id:'product',  label:'Foto de produto',        en:'professional product photography'},
+    {id:'editorial',label:'Editorial lifestyle',    en:'lifestyle editorial photography'},
+    {id:'interior', label:'Revista de decoração',   en:'interior design magazine photography'},
+    {id:'instagram',label:'Instagram aesthetic',    en:'Instagram aesthetic photography'},
+    {id:'arch',     label:'Arquitetônica',          en:'architectural photography'},
+    {id:'mockup',   label:'Mockup realista',        en:'a realistic photo mockup'},
+    {id:'film',     label:'Filme 35mm',             en:'35mm film photography'},
+    {id:'candid',   label:'Documental / candid',    en:'candid documentary photography'},
+    {id:'skip',     label:'Não especificar',        en:''}
+  ]},
+  { key:'angle', title:'Ângulo / Enquadramento', options:[
+    {id:'frontal', label:'Frontal',            en:'straight-on frontal view'},
+    {id:'angled',  label:'Levemente inclinado',en:'slightly angled three-quarter view'},
+    {id:'close',   label:'Close na obra',      en:'close-up shot focusing on the artwork'},
+    {id:'wide',    label:'Plano aberto',       en:'wide shot showing the full room context'},
+    {id:'eye',     label:'Nível dos olhos',    en:'eye-level perspective'},
+    {id:'topdown', label:'Vista de cima',      en:'top-down flat lay view'},
+    {id:'low',     label:'Contra-plongée',     en:'low angle perspective'},
+    {id:'skip',    label:'Não especificar',    en:''}
+  ]},
+  { key:'extras', title:'Extras (pode marcar vários)', multi:true, options:[
+    {id:'texture',  label:'Textura da tela',        en:'visible canvas texture and brushwork'},
+    {id:'bokeh',    label:'Fundo desfocado',        en:'shallow depth of field with a softly blurred background'},
+    {id:'shadows',  label:'Sombras realistas',      en:'realistic shadows, reflections and contact shadows'},
+    {id:'grain',    label:'Grão de filme',          en:'subtle film grain'},
+    {id:'negspace', label:'Espaço para texto',      en:'clean negative space above the artwork'},
+    {id:'minimal',  label:'Composição minimalista', en:'minimalist composition with plenty of empty space'},
+    {id:'decor',    label:'Objetos de decoração',   en:'a few tasteful decor details around the scene'},
+    {id:'noperson', label:'Sem pessoas',            en:'no people in the frame'}
+  ]}
 ];
 
+const SIZE_LABELS = {
+  small: 'approximately 30 cm',
+  medium: 'approximately 50 cm',
+  large: 'approximately 80 cm',
+  xl: 'approximately 120 cm or more'
+};
+const ORIENT_LABELS = {
+  auto: '',
+  portrait: 'portrait orientation (taller than wide)',
+  landscape: 'landscape orientation (wider than tall)',
+  square: 'square orientation'
+};
+const ORIENT_PT = { auto:'Auto', portrait:'Retrato', landscape:'Paisagem', square:'Quadrada' };
+
 /* ============================================================
-   ESTADO
+   STORAGE KEYS
    ============================================================ */
-const DEFAULTS = {
-  scene:'wall', frame:'canvas', environment:'living',
-  lighting:'window', style:'product', angle:'frontal'
+const KEY_FAVS = 'pp_favs_v1';
+const KEY_HIST = 'pp_hist_v1';
+const KEY_PRESETS = 'pp_presets_v1';
+const KEY_SETTINGS = 'pp_settings_v1';
+const KEY_USAGE = 'pp_usage_v1';
+
+const DEFAULTS = { scene:'wall', frame:'canvas', environment:'living', lighting:'window', style:'product', angle:'frontal' };
+const EXTRA_DEFAULTS = {
+  paintingDesc:'', paintingSize:'', paintingSizeCustom:'',
+  orientation:'auto', aspectRatio:'9:16', preserveStrength:2,
+  negativePrompt:'', customContext:'', mode:'detail'
 };
 
-const state = Object.assign({}, DEFAULTS, { extras:new Set() });
-let mode = 'detail';
-let currentPrompt = '';
+/* ============================================================
+   STATE
+   ============================================================ */
+let state = Object.assign({}, DEFAULTS, EXTRA_DEFAULTS, { extras: new Set() });
+let settings = { theme:'dark', hiddenCats: [] };
 
 const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
 const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 
 /* ============================================================
-   RENDER DAS CATEGORIAS
-   ============================================================ */
-function renderCategories(){
-  const wrap = $('#cats');
-  wrap.innerHTML = '';
-  CATS.forEach(cat => {
-    const sec = document.createElement('section');
-    sec.className = 'cat';
-    const h = document.createElement('h3');
-    h.textContent = cat.title;
-    sec.appendChild(h);
-
-    const chips = document.createElement('div');
-    chips.className = 'chips';
-
-    cat.options.forEach(opt => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'chip';
-      b.dataset.cat = cat.key;
-      b.dataset.id = opt.id;
-      b.textContent = opt.label;
-      b.addEventListener('click', () => select(cat, opt.id));
-      chips.appendChild(b);
-    });
-
-    sec.appendChild(chips);
-    wrap.appendChild(sec);
-  });
-  syncChips();
-}
-
-function select(cat, id){
-  if (cat.multi){
-    if (state[cat.key].has(id)) state[cat.key].delete(id);
-    else state[cat.key].add(id);
-  } else {
-    state[cat.key] = id;
-  }
-  syncChips();
-  update();
-}
-
-function syncChips(){
-  document.querySelectorAll('.chip').forEach(b => {
-    const cat = CATS.find(c => c.key === b.dataset.cat);
-    const on = cat.multi
-      ? state[cat.key].has(b.dataset.id)
-      : state[cat.key] === b.dataset.id;
-    b.classList.toggle('on', on);
-  });
-}
-
-/* ============================================================
-   HELPERS
+   UTILS
    ============================================================ */
 function optEn(catKey, id){
   const cat = CATS.find(c => c.key === catKey);
-  const opt = cat.options.find(o => o.id === id);
+  const opt = cat && cat.options.find(o => o.id === id);
   return opt ? opt.en : '';
 }
 function optLabel(catKey, id){
   const cat = CATS.find(c => c.key === catKey);
-  const opt = cat.options.find(o => o.id === id);
+  const opt = cat && cat.options.find(o => o.id === id);
   return opt ? opt.label : '';
 }
-function snapshotState(){
-  return {
-    scene: state.scene,
-    frame: state.frame,
-    environment: state.environment,
-    lighting: state.lighting,
-    style: state.style,
-    angle: state.angle,
-    extras: [...state.extras],
-    mode: mode
-  };
-}
-function restoreState(snap){
-  if (!snap) return;
-  ['scene','frame','environment','lighting','style','angle'].forEach(k => {
-    if (snap[k]) state[k] = snap[k];
-  });
-  state.extras = new Set(snap.extras || []);
-  if (snap.mode) mode = snap.mode;
-  document.querySelectorAll('.segbtn').forEach(x =>
-    x.classList.toggle('on', x.dataset.mode === mode)
-  );
-  syncChips();
-  update();
+function utf8ToB64(s){ return btoa(unescape(encodeURIComponent(s))); }
+function b64ToUtf8(s){ return decodeURIComponent(escape(atob(s))); }
+function debounce(fn, ms){ let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+function cloneState(s){
+  return Object.assign({}, s, { extras: new Set(s.extras) });
 }
 
 /* ============================================================
-   MONTAGEM DO PROMPT
+   BUILD PROMPT
    ============================================================ */
-function buildPrompt(){
-  const scene = optEn('scene', state.scene) || 'the attached painting';
-  const frame = optEn('frame', state.frame);
-  const env   = optEn('environment', state.environment);
-  const light = optEn('lighting', state.lighting);
-  const style = optEn('style', state.style);
-  const angle = optEn('angle', state.angle);
-  const extras = [...state.extras].map(id => optEn('extras', id)).filter(Boolean);
+function preserveText(level){
+  if (level === 1) return 'CRITICAL: The attached painting must remain exactly as in the original — do not alter, recolor, crop or restyle the artwork.';
+  if (level === 2) return 'CRITICAL — DO NOT ALTER THE ARTWORK:\nThe attached painting must stay exactly as in the original reference: same composition, colors, shapes, proportions, brushstrokes and details. Do NOT repaint, restyle, recolor, crop, stretch, blur or "improve" it. Do NOT add or remove any element inside the painting. It must remain 100% recognizable and faithful to the original artwork. Only integrate it realistically into the described scene, with correct perspective, scale, lighting and shadows.';
+  return 'CRITICAL — DO NOT ALTER THE ARTWORK (highest priority):\nThe attached painting must stay exactly as in the original reference: same composition, colors, shapes, proportions, brushstrokes, texture, and every detail. Do NOT repaint, restyle, recolor, crop, stretch, blur, upscale or "improve" it in any way. Do NOT add or remove any element inside the painting. Do NOT change its geometry, borders, or aspect ratio. It must remain 100% recognizable and faithful to the original artwork. Only integrate it realistically into the described scene, with correct perspective, scale, lighting and shadows. If any instruction conflicts with preserving the artwork, preserving the artwork takes absolute priority.';
+}
 
-  if (mode === 'short'){
-    const p = [`Photorealistic 9:16 vertical photo of ${scene}.`];
+function sizeText(s){
+  if (!s.paintingSize) return '';
+  if (s.paintingSize === 'custom') return s.paintingSizeCustom ? `The painting measures approximately ${s.paintingSizeCustom}.` : '';
+  return `The painting measures ${SIZE_LABELS[s.paintingSize] || ''}.`.trim();
+}
+
+function artworkBlock(s){
+  const lines = [];
+  if (s.paintingDesc.trim()) lines.push(`- Depicts: ${s.paintingDesc.trim()}`);
+  const st = sizeText(s); if (st) lines.push('- ' + st);
+  if (ORIENT_LABELS[s.orientation]) lines.push(`- Orientation: ${ORIENT_LABELS[s.orientation]}`);
+  return lines.join('\n');
+}
+
+function buildPromptFrom(s){
+  const scene = optEn('scene', s.scene) || 'the attached painting';
+  const frame = optEn('frame', s.frame);
+  const env   = optEn('environment', s.environment);
+  const light = optEn('lighting', s.lighting);
+  const style = optEn('style', s.style);
+  const angle = optEn('angle', s.angle);
+  const extras = [...s.extras].map(id => optEn('extras', id)).filter(Boolean);
+  const aspect = s.aspectRatio;
+  const art = artworkBlock(s);
+  const ctx = s.customContext.trim();
+  const neg = s.negativePrompt.trim();
+
+  if (s.mode === 'short'){
+    const p = [`Photorealistic ${aspect} vertical photo of ${scene}.`];
     if (frame) p.push(cap(frame) + '.');
     if (env)   p.push(`Setting: ${env}.`);
     if (light) p.push(`Lighting: ${light}.`);
     if (style) p.push(cap(style) + '.');
-    if (angle) p.push(`Camera angle: ${angle}.`);
+    if (angle) p.push(`Angle: ${angle}.`);
     if (extras.length) p.push(cap(extras.join('; ')) + '.');
-    p.push('The attached painting must remain exactly identical to the original — do not alter, recolor, crop, stretch or restyle the artwork; only integrate it realistically into the scene.');
-    p.push('No text, no watermark, no signature. Aspect ratio 9:16.');
+    if (art) p.push(art.replace(/^- /gm, '').replace(/\n/g, ' '));
+    if (ctx) p.push(cap(ctx) + '.');
+    p.push(preserveText(1));
+    if (neg) p.push(`Avoid: ${neg}.`);
+    p.push(`No text, no watermark. Aspect ratio ${aspect}.`);
     return p.join(' ');
   }
 
   const L = [];
-  L.push(`Create a photorealistic 9:16 vertical image of ${scene}.`);
+  L.push(`Create a photorealistic ${aspect} image of ${scene}.`);
   L.push('');
+  if (art){
+    L.push('ARTWORK:');
+    L.push(art);
+    L.push('');
+  }
   L.push('SCENE SETUP:');
   if (frame) L.push(`- Frame: ${frame}`);
   if (env)   L.push(`- Setting: ${env}`);
@@ -531,47 +616,97 @@ function buildPrompt(){
   if (style) L.push(`- Photography style: ${style}`);
   if (angle) L.push(`- Camera angle: ${angle}`);
   if (extras.length) L.push(`- Additional details: ${extras.join('; ')}`);
+  if (ctx)   L.push(`- Context: ${ctx}`);
   L.push('');
-  L.push('CRITICAL — DO NOT ALTER THE ARTWORK:');
-  L.push('The attached painting must stay exactly as in the original reference: same composition, colors, shapes, proportions, brushstrokes and details. Do NOT repaint, restyle, recolor, crop, stretch, blur or "improve" it. Do NOT add or remove any element inside the painting. It must remain 100% recognizable and faithful to the original artwork. Only integrate it realistically into the described scene, with correct perspective, scale, lighting and shadows.');
+  L.push(preserveText(s.preserveStrength));
+  if (neg){
+    L.push('');
+    L.push(`AVOID: ${neg}.`);
+  }
   L.push('');
-  L.push('No text, no watermark, no signature, no extra logos. Ultra-detailed, sharp focus, high resolution, aspect ratio 9:16.');
+  L.push(`No text, no watermark, no signature. Ultra-detailed, sharp focus, high resolution. Aspect ratio ${aspect}.`);
   return L.join('\n');
 }
+function buildPrompt(){ return buildPromptFrom(state); }
 
 /* ============================================================
-   UPDATE / TOAST
+   URL SYNC
    ============================================================ */
-function update(){
-  currentPrompt = buildPrompt();
-  $('#promptOut').textContent = currentPrompt;
-  $('#charCount').textContent = currentPrompt.length.toLocaleString('pt-BR') + ' caracteres';
+function encodeState(s){
+  const obj = {
+    s:s.scene, f:s.frame, e:s.environment, l:s.lighting, st:s.style, a:s.angle,
+    x:[...s.extras],
+    pd:s.paintingDesc, ps:s.paintingSize, psc:s.paintingSizeCustom,
+    o:s.orientation, ar:s.aspectRatio, pr:s.preserveStrength,
+    np:s.negativePrompt, cc:s.customContext, m:s.mode
+  };
+  return utf8ToB64(JSON.stringify(obj));
 }
-
-let toastTimer;
-function toast(msg){
-  const t = $('#toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
+function decodeState(b64){
+  try {
+    const obj = JSON.parse(b64ToUtf8(b64));
+    return {
+      scene: obj.s || DEFAULTS.scene, frame: obj.f || DEFAULTS.frame,
+      environment: obj.e || DEFAULTS.environment, lighting: obj.l || DEFAULTS.lighting,
+      style: obj.st || DEFAULTS.style, angle: obj.a || DEFAULTS.angle,
+      extras: new Set(obj.x || []),
+      paintingDesc: obj.pd || '', paintingSize: obj.ps || '',
+      paintingSizeCustom: obj.psc || '', orientation: obj.o || 'auto',
+      aspectRatio: obj.ar || '9:16', preserveStrength: obj.pr || 2,
+      negativePrompt: obj.np || '', customContext: obj.cc || '',
+      mode: obj.m || 'detail'
+    };
+  } catch(e){ return null; }
 }
+const syncURL = debounce(() => {
+  try {
+    const h = encodeState(state);
+    if (location.hash.slice(1) !== h) {
+      history.replaceState(null, '', '#' + h);
+    }
+  } catch(e){}
+}, 400);
 
 /* ============================================================
-   LABEL + TEMPO
+   PERSISTENCE
    ============================================================ */
-function favLabel(){
+function loadJSON(key, def){
+  try { return JSON.parse(localStorage.getItem(key) || 'null') || def; }
+  catch(e){ return def; }
+}
+function saveJSON(key, val){
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){}
+}
+function loadSettings(){
+  const s = loadJSON(KEY_SETTINGS, {});
+  settings.theme = s.theme || 'dark';
+  settings.hiddenCats = s.hiddenCats || [];
+}
+function saveSettings(){ saveJSON(KEY_SETTINGS, settings); }
+
+/* ============================================================
+   FAVS / PRESETS / HISTÓRICO
+   ============================================================ */
+function loadFavs(){ return loadJSON(KEY_FAVS, []); }
+function saveFavs(l){ saveJSON(KEY_FAVS, l); }
+function loadPresets(){ return loadJSON(KEY_PRESETS, []); }
+function savePresets(l){ saveJSON(KEY_PRESETS, l); }
+function loadHist(){ return loadJSON(KEY_HIST, []); }
+function saveHist(l){ saveJSON(KEY_HIST, l); }
+function loadUsage(){ return loadJSON(KEY_USAGE, { total: 0 }); }
+function saveUsage(u){ saveJSON(KEY_USAGE, u); }
+
+function favLabel(s = state){
   const parts = [
-    optLabel('scene', state.scene),
-    optLabel('frame', state.frame),
-    optLabel('style', state.style)
+    optLabel('scene', s.scene),
+    optLabel('frame', s.frame),
+    optLabel('style', s.style)
   ].filter(p => p && p !== 'Livre' && p !== 'Não especificar');
   return parts.join(' · ') || 'Prompt';
 }
 function fmtTime(iso){
   const d = new Date(iso);
-  const now = new Date();
-  const diff = Math.floor((now - d) / 1000);
+  const diff = Math.floor((Date.now() - d) / 1000);
   if (diff < 10) return 'agora';
   if (diff < 60) return `há ${diff}s`;
   if (diff < 3600) return `há ${Math.floor(diff/60)}min`;
@@ -581,80 +716,243 @@ function fmtTime(iso){
 }
 
 /* ============================================================
+   RENDER CATEGORIAS
+   ============================================================ */
+function renderCategories(){
+  const wrap = $('#cats');
+  wrap.innerHTML = '';
+  CATS.forEach(cat => {
+    if (settings.hiddenCats.includes(cat.key)) return;
+    const sec = document.createElement('section');
+    sec.className = 'cat';
+    const h = document.createElement('h3');
+    h.textContent = cat.title;
+    sec.appendChild(h);
+    const chips = document.createElement('div');
+    chips.className = 'chips';
+    cat.options.forEach(opt => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip';
+      b.dataset.cat = cat.key; b.dataset.id = opt.id;
+      b.textContent = opt.label;
+      b.addEventListener('click', () => selectOpt(cat, opt.id));
+      chips.appendChild(b);
+    });
+    sec.appendChild(chips);
+    wrap.appendChild(sec);
+  });
+  syncChips();
+}
+function selectOpt(cat, id){
+  if (cat.multi){
+    if (state[cat.key].has(id)) state[cat.key].delete(id);
+    else state[cat.key].add(id);
+  } else {
+    state[cat.key] = id;
+  }
+  syncChips(); update(); syncURL();
+}
+function syncChips(){
+  $$('.chip').forEach(b => {
+    const cat = CATS.find(c => c.key === b.dataset.cat);
+    if (!cat) return;
+    const on = cat.multi ? state[cat.key].has(b.dataset.id) : state[cat.key] === b.dataset.id;
+    b.classList.toggle('on', on);
+  });
+  $$('#orientationChips button').forEach(b =>
+    b.classList.toggle('on', b.dataset.orient === state.orientation));
+  $$('#aspectChips button').forEach(b =>
+    b.classList.toggle('on', b.dataset.aspect === state.aspectRatio));
+  $$('#segMode .segbtn').forEach(b =>
+    b.classList.toggle('on', b.dataset.mode === state.mode));
+}
+
+/* ============================================================
+   UPDATE / TOAST
+   ============================================================ */
+function update(){
+  const p = buildPrompt();
+  $('#promptOut').textContent = p;
+  $('#charCount').textContent = p.length.toLocaleString('pt-BR') + ' caracteres';
+  $('#aspectLabel').textContent = state.aspectRatio;
+}
+let toastTimer;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
+}
+
+/* ============================================================
+   MODAIS
+   ============================================================ */
+function showModal(html){
+  $('#modalContent').innerHTML = html;
+  $('#modalOverlay').classList.add('open');
+}
+function closeModal(){
+  $('#modalOverlay').classList.remove('open');
+}
+$('#modalOverlay').addEventListener('click', e => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+function confirmDialog(message, opts = {}){
+  return new Promise(resolve => {
+    showModal(`
+      <h3>${opts.title || 'Confirmar'}</h3>
+      <p>${message}</p>
+      <div class="modal-actions">
+        <button class="btn" id="_cancel">Cancelar</button>
+        <button class="btn ${opts.danger ? 'danger-solid' : 'primary'}" id="_ok">${opts.confirm || 'Confirmar'}</button>
+      </div>
+    `);
+    $('#_cancel').onclick = () => { closeModal(); resolve(false); };
+    $('#_ok').onclick = () => { closeModal(); resolve(true); };
+  });
+}
+
+function promptDialog(message, defaultValue = '', placeholder = ''){
+  return new Promise(resolve => {
+    showModal(`
+      <h3>${message}</h3>
+      <input type="text" class="modal-field" id="_prompt" value="${defaultValue.replace(/"/g,'&quot;')}" placeholder="${placeholder}">
+      <div class="modal-actions">
+        <button class="btn" id="_cancel">Cancelar</button>
+        <button class="btn primary" id="_ok">Salvar</button>
+      </div>
+    `);
+    setTimeout(() => $('#_prompt').focus(), 50);
+    const finish = (val) => { closeModal(); resolve(val); };
+    $('#_cancel').onclick = () => finish(null);
+    $('#_ok').onclick = () => finish($('#_prompt').value.trim());
+    $('#_prompt').addEventListener('keydown', e => {
+      if (e.key === 'Enter') finish($('#_prompt').value.trim());
+    });
+  });
+}
+
+/* ============================================================
    COPIAR
    ============================================================ */
-async function copyPrompt(){
-  const text = currentPrompt;
+async function copyText(text){
   let ok = false;
-  try {
-    await navigator.clipboard.writeText(text);
-    ok = true;
-  } catch(e){
+  try { await navigator.clipboard.writeText(text); ok = true; }
+  catch(e){
     const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
     try { document.execCommand('copy'); ok = true; } catch(_){}
     ta.remove();
   }
-  if (ok) toast('Prompt copiado! ✓');
-  else toast('Não foi possível copiar');
-  addToHistory();
+  return ok;
+}
+async function copyPrompt(){
+  const ok = await copyText(buildPrompt());
+  if (ok){
+    toast('Prompt copiado! ✓');
+    addToHistory();
+    const u = loadUsage(); u.total = (u.total || 0) + 1; saveUsage(u);
+  } else toast('Não foi possível copiar');
 }
 
 /* ============================================================
-   ALEATÓRIO / LIMPAR
+   ALEATÓRIO / LIMPAR / BATCH
    ============================================================ */
-function randomize(){
+function randomizeNonPaintingFields(s){
   CATS.forEach(cat => {
     if (cat.multi){
-      state[cat.key] = new Set();
+      s[cat.key] = new Set();
       const pool = cat.options.filter(o => o.id !== 'skip');
       const n = Math.floor(Math.random() * 3);
-      const shuffled = [...pool].sort(() => Math.random() - 0.5);
-      shuffled.slice(0, n).forEach(o => state[cat.key].add(o.id));
+      [...pool].sort(() => Math.random() - 0.5).slice(0, n).forEach(o => s[cat.key].add(o.id));
     } else {
       const r = cat.options[Math.floor(Math.random() * cat.options.length)];
-      state[cat.key] = r.id;
+      s[cat.key] = r.id;
     }
   });
-  syncChips();
-  update();
+  return s;
+}
+function randomize(){
+  randomizeNonPaintingFields(state);
+  syncChips(); update(); syncURL();
   toast('Combinação aleatória 🎲');
 }
-
 function reset(){
   Object.keys(DEFAULTS).forEach(k => state[k] = DEFAULTS[k]);
+  Object.keys(EXTRA_DEFAULTS).forEach(k => state[k] = EXTRA_DEFAULTS[k]);
   state.extras = new Set();
-  syncChips();
-  update();
+  applyFieldsToUI();
+  syncChips(); update(); syncURL();
   toast('Opções limpas');
+}
+function generateBatch(n = 6){
+  const results = [];
+  const seen = new Set();
+  let attempts = 0;
+  while (results.length < n && attempts < n * 15){
+    attempts++;
+    const s = cloneState(state);
+    randomizeNonPaintingFields(s);
+    const sig = [s.scene, s.frame, s.environment, s.lighting, s.style, s.angle, [...s.extras].sort().join(',')].join('|');
+    if (seen.has(sig)) continue;
+    seen.add(sig);
+    results.push({ state: s, label: favLabel(s), prompt: buildPromptFrom(s) });
+  }
+  return results;
+}
+function openBatch(){
+  const items = generateBatch(6);
+  const html = items.map((it, i) => `
+    <div class="batch-item">
+      <div class="batch-head">
+        <div class="batch-num">${i+1}</div>
+        <div class="batch-label" title="${it.label}">${it.label}</div>
+        <button class="iconbtn" data-copy-i="${i}" title="Copiar">📋</button>
+        <button class="iconbtn" data-restore-i="${i}" title="Aplicar">↺</button>
+      </div>
+      <div class="batch-prompt">${it.prompt.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>
+    </div>
+  `).join('');
+  showModal(`
+    <h3>✨ 6 variações</h3>
+    <p>Clique em 📋 para copiar um prompt ou em ↺ para aplicar essa combinação no painel.</p>
+    ${html}
+    <div class="modal-actions">
+      <button class="btn" id="_close">Fechar</button>
+    </div>
+  `);
+  $('#_close').onclick = closeModal;
+  $$('[data-copy-i]').forEach(b => b.onclick = async () => {
+    const item = items[+b.dataset.copyI];
+    const ok = await copyText(item.prompt);
+    if (ok) toast('Copiado! ✓');
+  });
+  $$('[data-restore-i]').forEach(b => b.onclick = () => {
+    const item = items[+b.dataset.restoreI];
+    state = cloneState(item.state);
+    applyFieldsToUI(); syncChips(); update(); syncURL();
+    closeModal();
+    toast('Combinação aplicada ↺');
+  });
 }
 
 /* ============================================================
-   FAVORITOS (localStorage)
+   FAVORITOS
    ============================================================ */
-const FAV_KEY = 'painting_prompts_favs_v1';
-
-function loadFavs(){
-  try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
-  catch(e){ return []; }
-}
-function persistFavs(list){
-  try { localStorage.setItem(FAV_KEY, JSON.stringify(list)); }
-  catch(e){ toast('Não foi possível salvar'); }
-}
 function saveFav(){
   const list = loadFavs();
-  list.unshift({ id: Date.now(), label: favLabel(), text: currentPrompt });
-  persistFavs(list.slice(0, 30));
+  list.unshift({ id: Date.now(), label: favLabel(), text: buildPrompt() });
+  saveFavs(list.slice(0, 50));
   renderFavs();
   toast('Prompt salvo ⭐');
 }
 function deleteFav(id){
-  persistFavs(loadFavs().filter(f => f.id !== id));
+  saveFavs(loadFavs().filter(f => f.id !== id));
   renderFavs();
 }
 function renderFavs(){
@@ -662,189 +960,394 @@ function renderFavs(){
   const list = loadFavs();
   $('#favCount').textContent = list.length;
   box.innerHTML = '';
-  if (!list.length){
-    box.innerHTML = '<div class="empty">Nenhum prompt salvo ainda.</div>';
-    return;
-  }
+  if (!list.length){ box.innerHTML = '<div class="empty">Nenhum prompt salvo ainda.</div>'; return; }
   list.forEach(f => {
     const row = document.createElement('div');
-    row.className = 'fav';
-
-    const label = document.createElement('div');
-    label.className = 'fav-label';
-    label.textContent = f.label;
-    label.title = f.text;
-
-    const actions = document.createElement('div');
-    actions.className = 'fav-actions';
-
-    const bCopy = document.createElement('button');
-    bCopy.className = 'iconbtn';
-    bCopy.textContent = '📋';
-    bCopy.title = 'Copiar';
-    bCopy.addEventListener('click', () => copyText(f.text));
-
-    const bDel = document.createElement('button');
-    bDel.className = 'iconbtn danger';
-    bDel.textContent = '✕';
-    bDel.title = 'Excluir';
-    bDel.addEventListener('click', () => deleteFav(f.id));
-
-    actions.append(bCopy, bDel);
-    row.append(label, actions);
+    row.className = 'item';
+    row.innerHTML = `
+      <div class="item-label" title="${(f.text || '').replace(/"/g,'&quot;').slice(0,200)}">${f.label}</div>
+      <div class="item-actions">
+        <button class="iconbtn" title="Copiar">📋</button>
+        <button class="iconbtn danger" title="Excluir">✕</button>
+      </div>
+    `;
+    const btns = row.querySelectorAll('button');
+    btns[0].onclick = async () => { if (await copyText(f.text)) toast('Copiado! ✓'); };
+    btns[1].onclick = () => deleteFav(f.id);
     box.appendChild(row);
   });
 }
-function copyText(text){
-  navigator.clipboard.writeText(text)
-    .then(() => toast('Prompt copiado! ✓'))
-    .catch(() => toast('Não foi possível copiar'));
+
+/* ============================================================
+   PRESETS
+   ============================================================ */
+async function savePreset(){
+  const name = await promptDialog('Nome do preset:', favLabel(), 'ex: Galeria dourada');
+  if (!name) return;
+  const list = loadPresets();
+  list.unshift({
+    id: Date.now(),
+    name,
+    snapshot: cloneState(state)
+  });
+  savePresets(list.slice(0, 40));
+  renderPresets();
+  toast('Preset salvo 📌');
+}
+function deletePreset(id){
+  savePresets(loadPresets().filter(p => p.id !== id));
+  renderPresets();
+}
+function applyPreset(id){
+  const p = loadPresets().find(x => x.id === id);
+  if (!p) return;
+  state = cloneState(p.snapshot);
+  applyFieldsToUI(); syncChips(); update(); syncURL();
+  toast('Preset aplicado ↺');
+}
+function renderPresets(){
+  const box = $('#presetList');
+  const list = loadPresets();
+  $('#presetCount').textContent = list.length;
+  box.innerHTML = '';
+  if (!list.length){ box.innerHTML = '<div class="empty">Nenhum preset salvo ainda.</div>'; return; }
+  list.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'item';
+    row.innerHTML = `
+      <div class="item-label" title="${p.name.replace(/"/g,'&quot;')}">📌 ${p.name}</div>
+      <div class="item-actions">
+        <button class="iconbtn" title="Aplicar">↺</button>
+        <button class="iconbtn danger" title="Excluir">✕</button>
+      </div>
+    `;
+    const btns = row.querySelectorAll('button');
+    btns[0].onclick = () => applyPreset(p.id);
+    btns[1].onclick = () => deletePreset(p.id);
+    box.appendChild(row);
+  });
 }
 
 /* ============================================================
-   HISTÓRICO (localStorage)
+   HISTÓRICO
    ============================================================ */
-const HIST_KEY = 'painting_prompts_hist_v1';
-const HIST_MAX = 50;
-
-function loadHist(){
-  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); }
-  catch(e){ return []; }
-}
-function persistHist(list){
-  try { localStorage.setItem(HIST_KEY, JSON.stringify(list)); }
-  catch(e){}
-}
-
 function addToHistory(){
   const list = loadHist();
   const entry = {
     id: Date.now(),
     ts: new Date().toISOString(),
     label: favLabel(),
-    text: currentPrompt,
-    mode: mode,
-    snapshot: snapshotState()
+    text: buildPrompt(),
+    mode: state.mode,
+    snapshot: cloneState(state)
   };
-  // Se o último for idêntico, só atualiza timestamp (evita duplicata imediata)
   if (list.length && list[0].text === entry.text){
-    list[0].ts = entry.ts;
-    list[0].mode = entry.mode;
-    list[0].snapshot = entry.snapshot;
+    list[0].ts = entry.ts; list[0].mode = entry.mode; list[0].snapshot = entry.snapshot;
   } else {
     list.unshift(entry);
   }
-  persistHist(list.slice(0, HIST_MAX));
+  saveHist(list.slice(0, 60));
   renderHist();
 }
-
 function deleteHist(id){
-  persistHist(loadHist().filter(h => h.id !== id));
+  saveHist(loadHist().filter(h => h.id !== id));
   renderHist();
 }
-
-function clearHist(){
+async function clearHist(){
   if (!loadHist().length) return;
-  if (!confirm('Apagar todo o histórico?')) return;
-  persistHist([]);
-  renderHist();
-  toast('Histórico limpo');
+  if (!(await confirmDialog('Apagar todo o histórico?', { confirm:'Apagar', danger:true }))) return;
+  saveHist([]); renderHist(); toast('Histórico limpo');
 }
-
 function restoreHist(id){
   const entry = loadHist().find(h => h.id === id);
   if (!entry) return;
-  restoreState(entry.snapshot);
+  state = cloneState(entry.snapshot);
+  applyFieldsToUI(); syncChips(); update(); syncURL();
   toast('Opções restauradas ↺');
 }
-
 function renderHist(){
   const box = $('#histList');
-  const list = loadHist();
-  $('#histCount').textContent = list.length;
+  const q = ($('#histSearch').value || '').toLowerCase().trim();
+  let list = loadHist();
+  if (q){
+    list = list.filter(h =>
+      (h.label || '').toLowerCase().includes(q) ||
+      (h.text || '').toLowerCase().includes(q)
+    );
+  }
+  $('#histCount').textContent = loadHist().length;
   box.innerHTML = '';
   if (!list.length){
-    box.innerHTML = '<div class="empty">Nada no histórico ainda — copie um prompt para começar.</div>';
+    box.innerHTML = `<div class="empty">${q ? 'Nada encontrado.' : 'Nada no histórico ainda — copie um prompt para começar.'}</div>`;
     return;
   }
   list.forEach(h => {
     const row = document.createElement('div');
-    row.className = 'hist-item';
-
-    const info = document.createElement('div');
-    info.className = 'hist-info';
-
-    const label = document.createElement('div');
-    label.className = 'hist-label';
-    label.textContent = h.label;
-    label.title = h.text;
-
-    const time = document.createElement('div');
-    time.className = 'hist-time';
-    const modeBadge = document.createElement('span');
-    modeBadge.className = 'mode-badge ' + (h.mode === 'short' ? 'short' : 'detail');
-    modeBadge.textContent = h.mode === 'short' ? 'Conciso' : 'Detalhado';
-    const timeText = document.createElement('span');
-    timeText.textContent = fmtTime(h.ts);
-    time.append(modeBadge, timeText);
-
-    info.append(label, time);
-
-    const actions = document.createElement('div');
-    actions.className = 'fav-actions';
-
-    const bCopy = document.createElement('button');
-    bCopy.className = 'iconbtn';
-    bCopy.textContent = '📋';
-    bCopy.title = 'Copiar novamente';
-    bCopy.addEventListener('click', () => copyText(h.text));
-
-    const bRestore = document.createElement('button');
-    bRestore.className = 'iconbtn';
-    bRestore.textContent = '↺';
-    bRestore.title = 'Restaurar opções';
-    bRestore.addEventListener('click', () => restoreHist(h.id));
-
-    const bDel = document.createElement('button');
-    bDel.className = 'iconbtn danger';
-    bDel.textContent = '✕';
-    bDel.title = 'Excluir';
-    bDel.addEventListener('click', () => deleteHist(h.id));
-
-    actions.append(bCopy, bRestore, bDel);
-    row.append(info, actions);
+    row.className = 'item';
+    row.innerHTML = `
+      <div style="flex:1;min-width:0">
+        <div class="item-label" title="${(h.text || '').replace(/"/g,'&quot;').slice(0,200)}">${h.label}</div>
+        <div class="item-time">
+          <span class="mode-badge ${h.mode === 'short' ? 'short' : 'detail'}">${h.mode === 'short' ? 'Conciso' : 'Detalhado'}</span>
+          <span>${fmtTime(h.ts)}</span>
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="iconbtn" title="Copiar">📋</button>
+        <button class="iconbtn" title="Restaurar opções">↺</button>
+        <button class="iconbtn danger" title="Excluir">✕</button>
+      </div>
+    `;
+    const btns = row.querySelectorAll('button');
+    btns[0].onclick = async () => { if (await copyText(h.text)) toast('Copiado! ✓'); };
+    btns[1].onclick = () => restoreHist(h.id);
+    btns[2].onclick = () => deleteHist(h.id);
     box.appendChild(row);
   });
 }
 
 /* ============================================================
-   EVENTOS
+   EXPORT / IMPORT
    ============================================================ */
+function exportData(){
+  const data = {
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    favs: loadFavs(),
+    presets: loadPresets().map(p => ({ id:p.id, name:p.name, snapshot: serializeSnapshot(p.snapshot) })),
+    history: loadHist().map(h => ({ ...h, snapshot: serializeSnapshot(h.snapshot) })),
+    settings,
+    usage: loadUsage()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `prompts-pinturas-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  toast('Backup exportado ⬇️');
+}
+function serializeSnapshot(s){
+  if (!s) return s;
+  return { ...s, extras: [...s.extras] };
+}
+function deserializeSnapshot(s){
+  if (!s) return s;
+  return { ...s, extras: new Set(s.extras || []) };
+}
+async function importData(file){
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!data || typeof data !== 'object') throw new Error('inválido');
+    const ok = await confirmDialog(
+      'Importar vai substituir favoritos, presets, histórico e configurações. Continuar?',
+      { confirm:'Importar', danger:true }
+    );
+    if (!ok) return;
+    if (Array.isArray(data.favs)) saveFavs(data.favs);
+    if (Array.isArray(data.presets)) savePresets(data.presets.map(p => ({
+      ...p, snapshot: deserializeSnapshot(p.snapshot)
+    })));
+    if (Array.isArray(data.history)) saveHist(data.history.map(h => ({
+      ...h, snapshot: deserializeSnapshot(h.snapshot)
+    })));
+    if (data.settings){
+      settings = Object.assign({ theme:'dark', hiddenCats:[] }, data.settings);
+      saveSettings();
+      applyTheme();
+      renderCategories();
+    }
+    if (data.usage) saveUsage(data.usage);
+    renderFavs(); renderPresets(); renderHist();
+    toast('Backup importado ⬆️');
+  } catch(e){
+    toast('Arquivo inválido');
+  }
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+function openSettings(){
+  const catsHtml = CATS.map(c => `
+    <label class="settings-cat">
+      <input type="checkbox" data-cat="${c.key}" ${settings.hiddenCats.includes(c.key) ? '' : 'checked'}>
+      <span>${c.title}</span>
+    </label>
+  `).join('');
+  const usage = loadUsage();
+  showModal(`
+    <h3>⚙️ Configurações</h3>
+    <div class="settings-section">
+      <h4>Tema</h4>
+      <div class="settings-row">
+        <button class="btn small ${settings.theme === 'dark' ? 'primary' : ''}" data-theme="dark">🌙 Escuro</button>
+        <button class="btn small ${settings.theme === 'light' ? 'primary' : ''}" data-theme="light">☀️ Claro</button>
+      </div>
+    </div>
+    <div class="settings-section">
+      <h4>Categorias visíveis</h4>
+      ${catsHtml}
+    </div>
+    <div class="settings-section">
+      <h4>Estatísticas</h4>
+      <div class="settings-stat">📋 Prompts copiados: <strong>${usage.total || 0}</strong></div>
+      <div class="settings-stat">⭐ Favoritos: ${loadFavs().length} · 📌 Presets: ${loadPresets().length} · 🕒 Histórico: ${loadHist().length}</div>
+    </div>
+    <div class="settings-section">
+      <h4>Zona de perigo</h4>
+      <button class="btn small danger" id="_wipe">🗑️ Apagar todos os dados</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn primary" id="_close">Fechar</button>
+    </div>
+  `);
+  $('#_close').onclick = closeModal;
+  $$('[data-theme]').forEach(b => b.onclick = () => {
+    settings.theme = b.dataset.theme;
+    saveSettings(); applyTheme();
+    $$('[data-theme]').forEach(x => x.classList.toggle('primary', x.dataset.theme === settings.theme));
+  });
+  $$('.settings-cat input').forEach(cb => cb.onchange = () => {
+    const k = cb.dataset.cat;
+    if (cb.checked) settings.hiddenCats = settings.hiddenCats.filter(x => x !== k);
+    else if (!settings.hiddenCats.includes(k)) settings.hiddenCats.push(k);
+    saveSettings(); renderCategories();
+  });
+  $('#_wipe').onclick = async () => {
+    if (!(await confirmDialog('Apagar TODOS os dados (favoritos, presets, histórico, config)? Não tem como desfazer.', { confirm:'Apagar tudo', danger:true }))) return;
+    [KEY_FAVS, KEY_HIST, KEY_PRESETS, KEY_SETTINGS, KEY_USAGE].forEach(k => localStorage.removeItem(k));
+    settings = { theme:'dark', hiddenCats:[] };
+    applyTheme(); renderCategories(); renderFavs(); renderPresets(); renderHist();
+    closeModal(); toast('Dados apagados');
+  };
+}
+
+/* ============================================================
+   THEME
+   ============================================================ */
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', settings.theme);
+  $('#btnTheme').textContent = settings.theme === 'light' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  settings.theme = settings.theme === 'light' ? 'dark' : 'light';
+  saveSettings(); applyTheme();
+}
+
+/* ============================================================
+   PAINTING INFO FIELDS
+   ============================================================ */
+function applyFieldsToUI(){
+  $('#paintingDesc').value = state.paintingDesc || '';
+  $('#paintingSize').value = state.paintingSize || '';
+  $('#paintingSizeCustom').value = state.paintingSizeCustom || '';
+  $('#paintingSizeCustom').style.display = state.paintingSize === 'custom' ? 'block' : 'none';
+  $('#preserveRange').value = state.preserveStrength;
+  $('#negativeInput').value = state.negativePrompt || '';
+  $('#contextInput').value = state.customContext || '';
+}
+function bindPaintingFields(){
+  $('#paintingDesc').addEventListener('input', e => {
+    state.paintingDesc = e.target.value; update(); syncURL();
+  });
+  $('#paintingSize').addEventListener('change', e => {
+    state.paintingSize = e.target.value;
+    $('#paintingSizeCustom').style.display = state.paintingSize === 'custom' ? 'block' : 'none';
+    if (state.paintingSize !== 'custom') state.paintingSizeCustom = '';
+    update(); syncURL();
+  });
+  $('#paintingSizeCustom').addEventListener('input', e => {
+    state.paintingSizeCustom = e.target.value; update(); syncURL();
+  });
+  $$('#orientationChips button').forEach(b => b.addEventListener('click', () => {
+    state.orientation = b.dataset.orient; syncChips(); update(); syncURL();
+  }));
+  $$('#aspectChips button').forEach(b => b.addEventListener('click', () => {
+    state.aspectRatio = b.dataset.aspect; syncChips(); update(); syncURL();
+  }));
+  $('#preserveRange').addEventListener('input', e => {
+    state.preserveStrength = parseInt(e.target.value, 10); update(); syncURL();
+  });
+  $('#negativeInput').addEventListener('input', e => {
+    state.negativePrompt = e.target.value; update(); syncURL();
+  });
+  $('#contextInput').addEventListener('input', e => {
+    state.customContext = e.target.value; update(); syncURL();
+  });
+}
+
+/* ============================================================
+   INIT + EVENTOS
+   ============================================================ */
+loadSettings();
+applyTheme();
+
+const initialHash = location.hash.slice(1);
+if (initialHash){
+  const decoded = decodeState(initialHash);
+  if (decoded) state = decoded;
+}
+
+renderCategories();
+applyFieldsToUI();
+renderFavs();
+renderPresets();
+renderHist();
+bindPaintingFields();
+syncChips();
+update();
+
 $('#btnCopy').addEventListener('click', copyPrompt);
 $('#mCopy').addEventListener('click', copyPrompt);
 $('#btnSave').addEventListener('click', saveFav);
+$('#btnSavePreset').addEventListener('click', savePreset);
 $('#btnRandom').addEventListener('click', randomize);
 $('#mRandom').addEventListener('click', randomize);
 $('#btnReset').addEventListener('click', reset);
+$('#btnBatch').addEventListener('click', openBatch);
 $('#btnClearHist').addEventListener('click', clearHist);
+$('#btnExport').addEventListener('click', exportData);
+$('#btnImport').addEventListener('click', () => $('#fileInput').click());
+$('#fileInput').addEventListener('change', e => {
+  if (e.target.files[0]) importData(e.target.files[0]);
+  e.target.value = '';
+});
+$('#btnTheme').addEventListener('click', toggleTheme);
+$('#btnSettings').addEventListener('click', openSettings);
+$('#histSearch').addEventListener('input', renderHist);
 
 $('#segMode').addEventListener('click', e => {
   const b = e.target.closest('.segbtn');
   if (!b) return;
-  mode = b.dataset.mode;
-  document.querySelectorAll('.segbtn').forEach(x => x.classList.toggle('on', x === b));
-  update();
+  state.mode = b.dataset.mode;
+  syncChips(); update(); syncURL();
 });
 
-/* ============================================================
-   INIT
-   ============================================================ */
-renderCategories();
-renderFavs();
-renderHist();
-update();
+window.addEventListener('hashchange', () => {
+  const h = location.hash.slice(1);
+  if (!h) return;
+  const decoded = decodeState(h);
+  if (decoded && encodeState(decoded) !== encodeState(state)){
+    state = decoded;
+    applyFieldsToUI(); syncChips(); update();
+  }
+});
 
-/* Atualiza os "há Xmin" a cada 30s */
+/* Atalhos */
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, select, textarea')) return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if (k === 'c') { e.preventDefault(); copyPrompt(); }
+  else if (k === 'r') { e.preventDefault(); randomize(); }
+  else if (k === 's') { e.preventDefault(); saveFav(); }
+  else if (k === 'b') { e.preventDefault(); openBatch(); }
+});
+
+/* Atualiza "há Xmin" do histórico a cada 30s */
 setInterval(() => {
   if (loadHist().length) renderHist();
 }, 30000);
