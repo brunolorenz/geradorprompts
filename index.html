@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gerador de Prompts — Pinturas</title>
 <style>
+  /* [MANTIDO IGUAL AO ANTERIOR] */
   :root{
     --bg:#0d0f13; --panel:#151920; --panel-2:#1b202a; --line:#272e3a;
     --txt:#e9edf3; --muted:#8f9aab;
@@ -32,77 +33,39 @@
       radial-gradient(760px 420px at -5% 0%, rgba(90,140,255,.08), transparent 55%),
       var(--bg);
   }
-
-  /* HEADER */
   .top{max-width:1260px;margin:0 auto;padding:20px 20px 6px;display:flex;align-items:flex-start;gap:14px}
   .brand{display:flex;gap:14px;align-items:flex-start;flex:1}
-  .logo{
-    width:46px;height:46px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:22px;
-    background:linear-gradient(145deg,#e8b65f,#a9711f);
-    box-shadow:0 8px 24px rgba(227,169,79,.28);
-  }
+  .logo{width:46px;height:46px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:22px;background:linear-gradient(145deg,#e8b65f,#a9711f);box-shadow:0 8px 24px rgba(227,169,79,.28)}
   h1{font-size:19px;margin:0 0 4px;letter-spacing:-.015em}
   .top p{margin:0;color:var(--muted);font-size:13px;line-height:1.5;max-width:600px}
   .top-actions{display:flex;gap:6px;flex:none;padding-top:2px}
-  .iconbtn-top{
-    width:40px;height:40px;border-radius:11px;border:1px solid var(--line);
-    background:var(--panel);color:var(--txt);font-size:17px;cursor:pointer;
-    transition:.14s;-webkit-tap-highlight-color:transparent;
-  }
+  .iconbtn-top{width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:var(--txt);font-size:17px;cursor:pointer;transition:.14s;-webkit-tap-highlight-color:transparent}
   .iconbtn-top:hover{background:var(--panel-2);border-color:#3b465a}
-
-  /* LAYOUT */
-  .layout{
-    max-width:1260px;margin:0 auto;padding:18px 20px 40px;
-    display:grid;grid-template-columns:minmax(0,1fr) 460px;gap:22px;align-items:start;
-  }
+  .layout{max-width:1260px;margin:0 auto;padding:18px 20px 40px;display:grid;grid-template-columns:minmax(0,1fr) 460px;gap:22px;align-items:start}
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-
-  /* PAINTING INFO */
   .painting-info{margin-bottom:18px}
   .painting-info h3{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:0 0 14px;font-weight:700}
   .field{margin-bottom:12px}
   .field:last-child{margin-bottom:0}
   .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
-  .field input[type="text"], .field select{
-    width:100%;font:inherit;font-size:13.5px;padding:9px 12px;border-radius:9px;
-    border:1px solid var(--line);background:var(--panel-2);color:var(--txt);
-    transition:border-color .14s;
-  }
+  .field input[type="text"], .field select{width:100%;font:inherit;font-size:13.5px;padding:9px 12px;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--txt);transition:border-color .14s}
   .field input[type="text"]:focus, .field select:focus{outline:none;border-color:var(--accent)}
   .field input[type="range"]{width:100%;accent-color:var(--accent);margin:4px 0}
   .slider-labels{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-top:2px}
   .chips-small{display:flex;gap:6px;flex-wrap:wrap}
-  .chips-small button{
-    font:inherit;font-size:12px;padding:6px 12px;border-radius:8px;
-    border:1px solid var(--line);background:var(--panel-2);color:var(--txt);cursor:pointer;transition:.14s;
-  }
+  .chips-small button{font:inherit;font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);color:var(--txt);cursor:pointer;transition:.14s}
   .chips-small button:hover{border-color:#3b465a}
   .chips-small button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
-
-  /* CATEGORIAS */
   .cat{margin-bottom:20px}
   .cat:last-of-type{margin-bottom:0}
   .cat h3{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin:0 0 10px;font-weight:700}
   .chips{display:flex;flex-wrap:wrap;gap:7px}
-  .chip{
-    font:inherit;font-size:13px;line-height:1;padding:8px 13px;border-radius:999px;cursor:pointer;
-    background:var(--panel-2);color:var(--txt);border:1px solid var(--line);
-    transition:.14s;-webkit-tap-highlight-color:transparent;
-  }
+  .chip{font:inherit;font-size:13px;line-height:1;padding:8px 13px;border-radius:999px;cursor:pointer;background:var(--panel-2);color:var(--txt);border:1px solid var(--line);transition:.14s;-webkit-tap-highlight-color:transparent}
   .chip:hover{border-color:#3b465a;transform:translateY(-1px)}
   .chip:active{transform:translateY(0)}
   .chip.on{background:linear-gradient(145deg,var(--accent-2),var(--accent));border-color:var(--accent);color:var(--accent-ink);font-weight:700}
-
-  /* BOTÕES */
   .row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-  .btn{
-    font:inherit;font-size:13px;font-weight:600;cursor:pointer;
-    padding:10px 15px;border-radius:10px;border:1px solid var(--line);
-    background:var(--panel-2);color:var(--txt);transition:.14s;
-    display:inline-flex;align-items:center;gap:6px;justify-content:center;
-    -webkit-tap-highlight-color:transparent;
-  }
+  .btn{font:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:10px 15px;border-radius:10px;border:1px solid var(--line);background:var(--panel-2);color:var(--txt);transition:.14s;display:inline-flex;align-items:center;gap:6px;justify-content:center;-webkit-tap-highlight-color:transparent}
   .btn:hover{border-color:#3b465a;transform:translateY(-1px)}
   .btn.primary{background:linear-gradient(145deg,var(--accent-2),var(--accent));color:var(--accent-ink);border-color:var(--accent);box-shadow:0 6px 18px rgba(227,169,79,.22)}
   .btn.ghost{background:transparent;border-color:transparent;color:var(--muted);font-size:12px;padding:8px 10px}
@@ -112,8 +75,6 @@
   .btn.danger:hover{background:rgba(220,80,80,.1);border-color:#ff8686}
   .btn.danger-solid{background:#c94a4a;color:#fff;border-color:#c94a4a}
   .btn.danger-solid:hover{background:#b13a3a}
-
-  /* PREVIEW */
   .preview{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#2c3442 transparent}
   .preview::-webkit-scrollbar{width:7px}
   .preview::-webkit-scrollbar-thumb{background:#2c3442;border-radius:8px}
@@ -122,41 +83,19 @@
   .seg{display:flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
   .segbtn{font:inherit;font-size:11.5px;font-weight:600;cursor:pointer;padding:6px 11px;border-radius:7px;border:none;background:transparent;color:var(--muted);transition:.14s}
   .segbtn.on{background:var(--panel);color:var(--txt);box-shadow:0 1px 3px rgba(0,0,0,.15)}
-  #promptOut{
-    margin:0;padding:14px;border-radius:11px;background:var(--code-bg);border:1px solid var(--line);
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:12.4px;line-height:1.55;color:var(--code-txt);
-    white-space:pre-wrap;word-break:break-word;max-height:300px;overflow:auto;
-  }
+  #promptOut{margin:0;padding:14px;border-radius:11px;background:var(--code-bg);border:1px solid var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.4px;line-height:1.55;color:var(--code-txt);white-space:pre-wrap;word-break:break-word;max-height:300px;overflow:auto}
   .meta{font-size:11.5px;color:var(--muted);margin:8px 2px 11px;display:flex;justify-content:space-between;gap:8px}
   .meta .aspect-badge{background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-weight:600;color:var(--txt)}
-
-  /* BLOCOS COLAPSÁVEIS */
   details.block{margin-top:14px;border-top:1px solid var(--line);padding-top:13px}
-  details.block summary{
-    cursor:pointer;font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;
-    color:var(--muted);font-weight:700;list-style:none;
-    display:flex;align-items:center;gap:8px;user-select:none;padding:2px 0;
-    -webkit-tap-highlight-color:transparent;
-  }
+  details.block summary{cursor:pointer;font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:700;list-style:none;display:flex;align-items:center;gap:8px;user-select:none;padding:2px 0;-webkit-tap-highlight-color:transparent}
   details.block summary::-webkit-details-marker{display:none}
   details.block summary::before{content:'▸';font-size:10px;transition:transform .15s}
   details.block[open] summary::before{transform:rotate(90deg)}
-  .count{
-    background:var(--panel-2);border:1px solid var(--line);border-radius:999px;
-    padding:2px 8px;font-size:10.5px;letter-spacing:0;text-transform:none;
-    color:var(--muted);font-weight:600;margin-left:auto;
-  }
+  .count{background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:10.5px;letter-spacing:0;text-transform:none;color:var(--muted);font-weight:600;margin-left:auto}
   .listbox{max-height:220px;overflow-y:auto;margin-top:9px;scrollbar-width:thin;scrollbar-color:#2c3442 transparent;padding-right:2px}
   .listbox::-webkit-scrollbar{width:6px}
   .listbox::-webkit-scrollbar-thumb{background:#2c3442;border-radius:6px}
-
-  /* ITENS */
-  .item{
-    display:flex;align-items:center;gap:9px;
-    background:var(--panel-2);border:1px solid var(--line);
-    border-radius:10px;padding:8px 9px;margin-bottom:7px;
-  }
+  .item{display:flex;align-items:center;gap:9px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px 9px;margin-bottom:7px}
   .item-label{flex:1;font-size:12.5px;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .item-time{font-size:10.5px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:6px}
   .mode-badge{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:4px}
@@ -167,68 +106,32 @@
   .iconbtn:hover{background:rgba(255,255,255,.06);color:var(--txt)}
   .iconbtn.danger:hover{background:rgba(220,80,80,.15);color:#ff8686}
   .empty{font-size:12.5px;color:var(--muted);font-style:italic;padding:6px 2px}
-  .hist-search{
-    width:100%;font:inherit;font-size:12.5px;padding:7px 11px;border-radius:8px;
-    border:1px solid var(--line);background:var(--panel-2);color:var(--txt);margin-top:9px;
-  }
+  .hist-search{width:100%;font:inherit;font-size:12.5px;padding:7px 11px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);color:var(--txt);margin-top:9px}
   .hist-search:focus{outline:none;border-color:var(--accent)}
-
-  /* MOBILE BAR */
   .mobilebar{display:none}
-  .toast{
-    position:fixed;left:50%;top:18px;transform:translate(-50%,-24px);
-    background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;
-    padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;
-    transition:.25s;z-index:400;box-shadow:0 8px 26px rgba(0,0,0,.4);max-width:90vw;text-align:center;
-  }
+  .toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-24px);background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:400;box-shadow:0 8px 26px rgba(0,0,0,.4);max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translate(-50%,0)}
-
-  /* MODAL */
-  .modal-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);
-    z-index:300;display:none;align-items:center;justify-content:center;padding:18px;
-  }
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);z-index:300;display:none;align-items:center;justify-content:center;padding:18px}
   .modal-overlay.open{display:flex;animation:fadeIn .16s}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  .modal{
-    background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;
-    max-width:600px;width:100%;max-height:88vh;overflow-y:auto;
-    box-shadow:0 24px 60px rgba(0,0,0,.5);
-    animation:slideUp .2s;
-  }
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;max-width:600px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.5);animation:slideUp .2s}
   @keyframes slideUp{from{transform:translateY(12px);opacity:.7}to{transform:translateY(0);opacity:1}}
   .modal h3{margin:0 0 14px;font-size:17px;letter-spacing:-.01em}
   .modal p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 16px}
   .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
   .modal-field{width:100%;font:inherit;font-size:14px;padding:10px 13px;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--txt);margin-bottom:14px}
   .modal-field:focus{outline:none;border-color:var(--accent)}
-
-  /* BATCH MODAL */
-  .batch-item{
-    background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
-    padding:10px 12px;margin-bottom:8px;
-  }
+  .batch-item{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
   .batch-head{display:flex;align-items:center;gap:9px;margin-bottom:6px}
-  .batch-num{
-    width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
-    display:grid;place-items:center;font-size:11px;font-weight:700;flex:none;
-  }
+  .batch-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
   .batch-label{flex:1;font-size:12.5px;font-weight:600;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .batch-prompt{
-    font-family:ui-monospace,monospace;font-size:11px;line-height:1.5;
-    color:var(--code-txt);max-height:80px;overflow-y:auto;
-    background:var(--code-bg);border-radius:6px;padding:8px;border:1px solid var(--line);
-  }
-
-  /* SETTINGS */
+  .batch-prompt{font-family:ui-monospace,monospace;font-size:11px;line-height:1.5;color:var(--code-txt);max-height:80px;overflow-y:auto;background:var(--code-bg);border-radius:6px;padding:8px;border:1px solid var(--line)}
   .settings-section{margin-bottom:22px}
   .settings-section h4{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:0 0 10px;font-weight:700}
   .settings-row{display:flex;gap:6px;flex-wrap:wrap}
   .settings-cat{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;cursor:pointer;user-select:none}
   .settings-cat input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer}
   .settings-stat{font-size:12.5px;color:var(--muted);padding:6px 0}
-
-  /* RESPONSIVO */
   @media (max-width:980px){
     .top{padding:16px 14px 4px;flex-wrap:wrap}
     h1{font-size:17px}
@@ -238,12 +141,7 @@
     .preview{position:static;max-height:none;overflow:visible}
     #promptOut{max-height:none}
     .chip{font-size:12.5px;padding:8px 12px}
-    .mobilebar{
-      display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:100;
-      padding:9px 11px calc(9px + env(safe-area-inset-bottom));
-      background:rgba(13,15,19,.94);backdrop-filter:blur(14px);
-      border-top:1px solid var(--line);
-    }
+    .mobilebar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:100;padding:9px 11px calc(9px + env(safe-area-inset-bottom));background:rgba(13,15,19,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
     [data-theme="light"] .mobilebar{background:rgba(255,255,255,.94)}
     .mobilebar .btn{flex:1;padding:12px 12px}
     .mobilebar .btn.primary{flex:2.4}
@@ -275,13 +173,13 @@
         <input type="text" id="paintingDesc" placeholder="ex: abstrato azul, pinceladas grossas">
       </div>
       <div class="field">
-        <label for="paintingSize">Tamanho</label>
+        <label for="paintingSize">Tamanho (escala relativa)</label>
         <select id="paintingSize">
           <option value="">Não especificar</option>
-          <option value="small">Pequena (até 30 cm)</option>
-          <option value="medium">Média (30–60 cm)</option>
-          <option value="large">Grande (60–100 cm)</option>
-          <option value="xl">Muito grande (100 cm+)</option>
+          <option value="small">Pequena (cabe na mão, tipo A5)</option>
+          <option value="medium">Média (tipo A4/A3, precisa das 2 mãos)</option>
+          <option value="large">Grande (tipo cartaz)</option>
+          <option value="xl">Muito grande (domina a parede)</option>
           <option value="custom">Personalizada…</option>
         </select>
         <input type="text" id="paintingSizeCustom" placeholder="ex: 50 × 70 cm" style="display:none;margin-top:8px">
@@ -403,7 +301,7 @@
 const CATS = [
   { key:'scene', title:'Contexto / Cena', options:[
     {id:'wall',    label:'Na parede',            en:'the attached painting hanging on a wall'},
-    {id:'hand1',   label:'Na mão (1 mão)',       en:'a person holding the attached painting with one hand'},
+    {id:'hand1',   label:'Na mão (1 mão)',       en:'a person holding the small attached painting in one hand, the painting fits comfortably in the palm'},
     {id:'hand2',   label:'Nas duas mãos',        en:'a person holding the attached painting with both hands, presenting it to the camera'},
     {id:'bench',   label:'Na bancada',           en:'the attached painting resting on a workbench or countertop'},
     {id:'easel',   label:'No cavalete',          en:'the attached painting displayed on a wooden easel'},
@@ -490,10 +388,10 @@ const CATS = [
 ];
 
 const SIZE_LABELS = {
-  small: 'approximately 30 cm',
-  medium: 'approximately 50 cm',
-  large: 'approximately 80 cm',
-  xl: 'approximately 120 cm or more'
+  small: 'small physical object, comparable to an A5 notebook or a book cover, fits easily in one hand',
+  medium: 'medium physical object, comparable to an A4 or A3 paper size, requires two hands to hold comfortably',
+  large: 'large physical object, comparable to a large poster',
+  xl: 'extra-large physical object, dominating the wall space'
 };
 const ORIENT_LABELS = {
   auto: '',
@@ -545,9 +443,7 @@ function optLabel(catKey, id){
 function utf8ToB64(s){ return btoa(unescape(encodeURIComponent(s))); }
 function b64ToUtf8(s){ return decodeURIComponent(escape(atob(s))); }
 function debounce(fn, ms){ let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
-function cloneState(s){
-  return Object.assign({}, s, { extras: new Set(s.extras) });
-}
+function cloneState(s){ return Object.assign({}, s, { extras: new Set(s.extras) }); }
 
 /* ============================================================
    BUILD PROMPT
@@ -560,8 +456,8 @@ function preserveText(level){
 
 function sizeText(s){
   if (!s.paintingSize) return '';
-  if (s.paintingSize === 'custom') return s.paintingSizeCustom ? `The painting measures approximately ${s.paintingSizeCustom}.` : '';
-  return `The painting measures ${SIZE_LABELS[s.paintingSize] || ''}.`.trim();
+  if (s.paintingSize === 'custom') return s.paintingSizeCustom ? `The physical painting is relatively small, measuring approximately ${s.paintingSizeCustom}.` : '';
+  return `The physical painting is ${SIZE_LABELS[s.paintingSize] || ''}.`;
 }
 
 function artworkBlock(s){
@@ -583,7 +479,13 @@ function buildPromptFrom(s){
   const aspect = s.aspectRatio;
   const art = artworkBlock(s);
   const ctx = s.customContext.trim();
-  const neg = s.negativePrompt.trim();
+  
+  // Auto negative prompt for scale issues
+  let neg = s.negativePrompt.trim();
+  const autoScaleNeg = 'oversized painting, giant frame, massive canvas, out of scale';
+  if (s.paintingSize === 'small' || s.paintingSize === 'medium') {
+    neg = neg ? `${neg}, ${autoScaleNeg}` : autoScaleNeg;
+  }
 
   if (s.mode === 'short'){
     const p = [`Photorealistic ${aspect} vertical photo of ${scene}.`];
@@ -605,8 +507,9 @@ function buildPromptFrom(s){
   L.push(`Create a photorealistic ${aspect} image of ${scene}.`);
   L.push('');
   if (art){
-    L.push('ARTWORK:');
+    L.push('ARTWORK SCALE & SIZE (CRITICAL):');
     L.push(art);
+    L.push('The painting must appear at its true physical scale in the scene, relative to the environment and human hands. Do not draw it larger than it actually is.');
     L.push('');
   }
   L.push('SCENE SETUP:');
@@ -670,18 +573,9 @@ const syncURL = debounce(() => {
 /* ============================================================
    PERSISTENCE
    ============================================================ */
-function loadJSON(key, def){
-  try { return JSON.parse(localStorage.getItem(key) || 'null') || def; }
-  catch(e){ return def; }
-}
-function saveJSON(key, val){
-  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){}
-}
-function loadSettings(){
-  const s = loadJSON(KEY_SETTINGS, {});
-  settings.theme = s.theme || 'dark';
-  settings.hiddenCats = s.hiddenCats || [];
-}
+function loadJSON(key, def){ try { return JSON.parse(localStorage.getItem(key) || 'null') || def; } catch(e){ return def; } }
+function saveJSON(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){} }
+function loadSettings(){ const s = loadJSON(KEY_SETTINGS, {}); settings.theme = s.theme || 'dark'; settings.hiddenCats = s.hiddenCats || []; }
 function saveSettings(){ saveJSON(KEY_SETTINGS, settings); }
 
 /* ============================================================
@@ -697,11 +591,7 @@ function loadUsage(){ return loadJSON(KEY_USAGE, { total: 0 }); }
 function saveUsage(u){ saveJSON(KEY_USAGE, u); }
 
 function favLabel(s = state){
-  const parts = [
-    optLabel('scene', s.scene),
-    optLabel('frame', s.frame),
-    optLabel('style', s.style)
-  ].filter(p => p && p !== 'Livre' && p !== 'Não especificar');
+  const parts = [ optLabel('scene', s.scene), optLabel('frame', s.frame), optLabel('style', s.style) ].filter(p => p && p !== 'Livre' && p !== 'Não especificar');
   return parts.join(' · ') || 'Prompt';
 }
 function fmtTime(iso){
@@ -759,12 +649,9 @@ function syncChips(){
     const on = cat.multi ? state[cat.key].has(b.dataset.id) : state[cat.key] === b.dataset.id;
     b.classList.toggle('on', on);
   });
-  $$('#orientationChips button').forEach(b =>
-    b.classList.toggle('on', b.dataset.orient === state.orientation));
-  $$('#aspectChips button').forEach(b =>
-    b.classList.toggle('on', b.dataset.aspect === state.aspectRatio));
-  $$('#segMode .segbtn').forEach(b =>
-    b.classList.toggle('on', b.dataset.mode === state.mode));
+  $$('#orientationChips button').forEach(b => b.classList.toggle('on', b.dataset.orient === state.orientation));
+  $$('#aspectChips button').forEach(b => b.classList.toggle('on', b.dataset.aspect === state.aspectRatio));
+  $$('#segMode .segbtn').forEach(b => b.classList.toggle('on', b.dataset.mode === state.mode));
 }
 
 /* ============================================================
@@ -787,19 +674,10 @@ function toast(msg){
 /* ============================================================
    MODAIS
    ============================================================ */
-function showModal(html){
-  $('#modalContent').innerHTML = html;
-  $('#modalOverlay').classList.add('open');
-}
-function closeModal(){
-  $('#modalOverlay').classList.remove('open');
-}
-$('#modalOverlay').addEventListener('click', e => {
-  if (e.target.id === 'modalOverlay') closeModal();
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-});
+function showModal(html){ $('#modalContent').innerHTML = html; $('#modalOverlay').classList.add('open'); }
+function closeModal(){ $('#modalOverlay').classList.remove('open'); }
+$('#modalOverlay').addEventListener('click', e => { if (e.target.id === 'modalOverlay') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 function confirmDialog(message, opts = {}){
   return new Promise(resolve => {
@@ -830,9 +708,7 @@ function promptDialog(message, defaultValue = '', placeholder = ''){
     const finish = (val) => { closeModal(); resolve(val); };
     $('#_cancel').onclick = () => finish(null);
     $('#_ok').onclick = () => finish($('#_prompt').value.trim());
-    $('#_prompt').addEventListener('keydown', e => {
-      if (e.key === 'Enter') finish($('#_prompt').value.trim());
-    });
+    $('#_prompt').addEventListener('keydown', e => { if (e.key === 'Enter') finish($('#_prompt').value.trim()); });
   });
 }
 
@@ -929,8 +805,7 @@ function openBatch(){
   $('#_close').onclick = closeModal;
   $$('[data-copy-i]').forEach(b => b.onclick = async () => {
     const item = items[+b.dataset.copyI];
-    const ok = await copyText(item.prompt);
-    if (ok) toast('Copiado! ✓');
+    if (await copyText(item.prompt)) toast('Copiado! ✓');
   });
   $$('[data-restore-i]').forEach(b => b.onclick = () => {
     const item = items[+b.dataset.restoreI];
@@ -985,11 +860,7 @@ async function savePreset(){
   const name = await promptDialog('Nome do preset:', favLabel(), 'ex: Galeria dourada');
   if (!name) return;
   const list = loadPresets();
-  list.unshift({
-    id: Date.now(),
-    name,
-    snapshot: cloneState(state)
-  });
+  list.unshift({ id: Date.now(), name, snapshot: cloneState(state) });
   savePresets(list.slice(0, 40));
   renderPresets();
   toast('Preset salvo 📌');
@@ -1033,14 +904,7 @@ function renderPresets(){
    ============================================================ */
 function addToHistory(){
   const list = loadHist();
-  const entry = {
-    id: Date.now(),
-    ts: new Date().toISOString(),
-    label: favLabel(),
-    text: buildPrompt(),
-    mode: state.mode,
-    snapshot: cloneState(state)
-  };
+  const entry = { id: Date.now(), ts: new Date().toISOString(), label: favLabel(), text: buildPrompt(), mode: state.mode, snapshot: cloneState(state) };
   if (list.length && list[0].text === entry.text){
     list[0].ts = entry.ts; list[0].mode = entry.mode; list[0].snapshot = entry.snapshot;
   } else {
@@ -1070,10 +934,7 @@ function renderHist(){
   const q = ($('#histSearch').value || '').toLowerCase().trim();
   let list = loadHist();
   if (q){
-    list = list.filter(h =>
-      (h.label || '').toLowerCase().includes(q) ||
-      (h.text || '').toLowerCase().includes(q)
-    );
+    list = list.filter(h => (h.label || '').toLowerCase().includes(q) || (h.text || '').toLowerCase().includes(q));
   }
   $('#histCount').textContent = loadHist().length;
   box.innerHTML = '';
@@ -1111,60 +972,36 @@ function renderHist(){
    ============================================================ */
 function exportData(){
   const data = {
-    version: 2,
-    exportedAt: new Date().toISOString(),
+    version: 2, exportedAt: new Date().toISOString(),
     favs: loadFavs(),
     presets: loadPresets().map(p => ({ id:p.id, name:p.name, snapshot: serializeSnapshot(p.snapshot) })),
     history: loadHist().map(h => ({ ...h, snapshot: serializeSnapshot(h.snapshot) })),
-    settings,
-    usage: loadUsage()
+    settings, usage: loadUsage()
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `prompts-pinturas-${new Date().toISOString().slice(0,10)}.json`;
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = `prompts-pinturas-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   toast('Backup exportado ⬇️');
 }
-function serializeSnapshot(s){
-  if (!s) return s;
-  return { ...s, extras: [...s.extras] };
-}
-function deserializeSnapshot(s){
-  if (!s) return s;
-  return { ...s, extras: new Set(s.extras || []) };
-}
+function serializeSnapshot(s){ return s ? { ...s, extras: [...s.extras] } : s; }
+function deserializeSnapshot(s){ return s ? { ...s, extras: new Set(s.extras || []) } : s; }
 async function importData(file){
   try {
     const text = await file.text();
     const data = JSON.parse(text);
     if (!data || typeof data !== 'object') throw new Error('inválido');
-    const ok = await confirmDialog(
-      'Importar vai substituir favoritos, presets, histórico e configurações. Continuar?',
-      { confirm:'Importar', danger:true }
-    );
+    const ok = await confirmDialog('Importar vai substituir favoritos, presets, histórico e configurações. Continuar?', { confirm:'Importar', danger:true });
     if (!ok) return;
     if (Array.isArray(data.favs)) saveFavs(data.favs);
-    if (Array.isArray(data.presets)) savePresets(data.presets.map(p => ({
-      ...p, snapshot: deserializeSnapshot(p.snapshot)
-    })));
-    if (Array.isArray(data.history)) saveHist(data.history.map(h => ({
-      ...h, snapshot: deserializeSnapshot(h.snapshot)
-    })));
-    if (data.settings){
-      settings = Object.assign({ theme:'dark', hiddenCats:[] }, data.settings);
-      saveSettings();
-      applyTheme();
-      renderCategories();
-    }
+    if (Array.isArray(data.presets)) savePresets(data.presets.map(p => ({ ...p, snapshot: deserializeSnapshot(p.snapshot) })));
+    if (Array.isArray(data.history)) saveHist(data.history.map(h => ({ ...h, snapshot: deserializeSnapshot(h.snapshot) })));
+    if (data.settings){ settings = Object.assign({ theme:'dark', hiddenCats:[] }, data.settings); saveSettings(); applyTheme(); renderCategories(); }
     if (data.usage) saveUsage(data.usage);
     renderFavs(); renderPresets(); renderHist();
     toast('Backup importado ⬆️');
-  } catch(e){
-    toast('Arquivo inválido');
-  }
+  } catch(e){ toast('Arquivo inválido'); }
 }
 
 /* ============================================================
@@ -1250,33 +1087,19 @@ function applyFieldsToUI(){
   $('#contextInput').value = state.customContext || '';
 }
 function bindPaintingFields(){
-  $('#paintingDesc').addEventListener('input', e => {
-    state.paintingDesc = e.target.value; update(); syncURL();
-  });
+  $('#paintingDesc').addEventListener('input', e => { state.paintingDesc = e.target.value; update(); syncURL(); });
   $('#paintingSize').addEventListener('change', e => {
     state.paintingSize = e.target.value;
     $('#paintingSizeCustom').style.display = state.paintingSize === 'custom' ? 'block' : 'none';
     if (state.paintingSize !== 'custom') state.paintingSizeCustom = '';
     update(); syncURL();
   });
-  $('#paintingSizeCustom').addEventListener('input', e => {
-    state.paintingSizeCustom = e.target.value; update(); syncURL();
-  });
-  $$('#orientationChips button').forEach(b => b.addEventListener('click', () => {
-    state.orientation = b.dataset.orient; syncChips(); update(); syncURL();
-  }));
-  $$('#aspectChips button').forEach(b => b.addEventListener('click', () => {
-    state.aspectRatio = b.dataset.aspect; syncChips(); update(); syncURL();
-  }));
-  $('#preserveRange').addEventListener('input', e => {
-    state.preserveStrength = parseInt(e.target.value, 10); update(); syncURL();
-  });
-  $('#negativeInput').addEventListener('input', e => {
-    state.negativePrompt = e.target.value; update(); syncURL();
-  });
-  $('#contextInput').addEventListener('input', e => {
-    state.customContext = e.target.value; update(); syncURL();
-  });
+  $('#paintingSizeCustom').addEventListener('input', e => { state.paintingSizeCustom = e.target.value; update(); syncURL(); });
+  $$('#orientationChips button').forEach(b => b.addEventListener('click', () => { state.orientation = b.dataset.orient; syncChips(); update(); syncURL(); }));
+  $$('#aspectChips button').forEach(b => b.addEventListener('click', () => { state.aspectRatio = b.dataset.aspect; syncChips(); update(); syncURL(); }));
+  $('#preserveRange').addEventListener('input', e => { state.preserveStrength = parseInt(e.target.value, 10); update(); syncURL(); });
+  $('#negativeInput').addEventListener('input', e => { state.negativePrompt = e.target.value; update(); syncURL(); });
+  $('#contextInput').addEventListener('input', e => { state.customContext = e.target.value; update(); syncURL(); });
 }
 
 /* ============================================================
@@ -1311,10 +1134,7 @@ $('#btnBatch').addEventListener('click', openBatch);
 $('#btnClearHist').addEventListener('click', clearHist);
 $('#btnExport').addEventListener('click', exportData);
 $('#btnImport').addEventListener('click', () => $('#fileInput').click());
-$('#fileInput').addEventListener('change', e => {
-  if (e.target.files[0]) importData(e.target.files[0]);
-  e.target.value = '';
-});
+$('#fileInput').addEventListener('change', e => { if (e.target.files[0]) importData(e.target.files[0]); e.target.value = ''; });
 $('#btnTheme').addEventListener('click', toggleTheme);
 $('#btnSettings').addEventListener('click', openSettings);
 $('#histSearch').addEventListener('input', renderHist);
@@ -1336,7 +1156,6 @@ window.addEventListener('hashchange', () => {
   }
 });
 
-/* Atalhos */
 document.addEventListener('keydown', e => {
   if (e.target.matches('input, select, textarea')) return;
   if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -1347,10 +1166,7 @@ document.addEventListener('keydown', e => {
   else if (k === 'b') { e.preventDefault(); openBatch(); }
 });
 
-/* Atualiza "há Xmin" do histórico a cada 30s */
-setInterval(() => {
-  if (loadHist().length) renderHist();
-}, 30000);
+setInterval(() => { if (loadHist().length) renderHist(); }, 30000);
 </script>
 </body>
 </html>
